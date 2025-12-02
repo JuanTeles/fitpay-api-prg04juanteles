@@ -4,6 +4,7 @@ import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.model.Movim
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service.MovimentacaoFinanceiraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +29,27 @@ public class MovimentacaoFinanceiraController {
     @GetMapping("/findall")
     public ResponseEntity<List<MovimentacaoFinanceira>> findAll() {
         return ResponseEntity.ok(movimentacaoFinanceiraService.findAll());
+    }
+
+    // Endpoint para Deletar por ID
+    // {id} é a variável de caminho que identifica qual movimentacao excluir
+    @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        // Executa a exclusão primeiro
+        movimentacaoFinanceiraService.delete(id);
+
+        // Depois retorna o status NO_CONTENT sem corpo (build)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // Edpoint para atualizar a movimentação financeira
+    // A anotação @PutMapping mapeia requisições HTTP PUT para atualizações
+    @PutMapping(path = "/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@RequestBody MovimentacaoFinanceira movimentacaoFinanceira) {
+        movimentacaoFinanceiraService.update(movimentacaoFinanceira);
+        // Retorna 204 No Content após atualizar com sucesso
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

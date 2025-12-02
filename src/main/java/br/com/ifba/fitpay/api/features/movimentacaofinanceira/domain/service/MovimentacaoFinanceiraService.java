@@ -12,11 +12,23 @@ import java.util.List;
 public class MovimentacaoFinanceiraService {
     private final MovimentacaoFinanceiraRepository movimentacaoFinanceiraRepository;
 
+    // Metodo save
     public MovimentacaoFinanceira save(MovimentacaoFinanceira movimentacaoFinanceira) {
         return movimentacaoFinanceiraRepository.save(movimentacaoFinanceira);
     }
 
+    // Metodo findAll
     public List<MovimentacaoFinanceira> findAll() {
         return movimentacaoFinanceiraRepository.findAll();
+    }
+
+    // Metodo Update
+    public MovimentacaoFinanceira update(MovimentacaoFinanceira movimentacaoFinanceira) {
+        return movimentacaoFinanceiraRepository.save(movimentacaoFinanceira);
+    }
+
+    // Metodo Delete
+    public void delete(Long id) {
+        movimentacaoFinanceiraRepository.deleteById(id);
     }
 }

@@ -12,11 +12,23 @@ import java.util.List;
 public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
 
+    // Metodo save
     public Endereco save(Endereco endereco) {
         return enderecoRepository.save(endereco);
     }
 
+    // Metodo findAll
     public List<Endereco> findAll() {
         return enderecoRepository.findAll();
+    }
+
+    // Metodo Update
+    public Endereco update(Endereco endereco) {
+        return enderecoRepository.save(endereco);
+    }
+
+    // Metodo Delete
+    public void delete(Long id) {
+        enderecoRepository.deleteById(id);
     }
 }

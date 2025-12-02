@@ -12,11 +12,23 @@ import java.util.List;
 public class PlanoService {
     private final PlanoRepository planoRepository;
 
+    // Metodo save
     public Plano save(Plano plano) {
         return planoRepository.save(plano);
     }
 
+    // Metodo findAll
     public List<Plano> findAll() {
         return planoRepository.findAll();
+    }
+
+    // Metodo Update
+    public Plano update(Plano plano) {
+        return planoRepository.save(plano);
+    }
+
+    // Metodo Delete
+    public void delete(Long id) {
+        planoRepository.deleteById(id);
     }
 }

@@ -12,11 +12,23 @@ import java.util.List;
 public class PagamentoService {
     private final PagamentoRepository pagamentoRepository;
 
+    // Metodo save
     public Pagamento save(Pagamento pagamento) {
         return pagamentoRepository.save(pagamento);
     }
 
+    // Metodo findAll
     public List<Pagamento> findAll() {
         return pagamentoRepository.findAll();
+    }
+
+    // Metodo Update
+    public Pagamento update(Pagamento pagamento) {
+        return pagamentoRepository.save(pagamento);
+    }
+
+    // Metodo Delete
+    public void delete(Long id) {
+        pagamentoRepository.deleteById(id);
     }
 }

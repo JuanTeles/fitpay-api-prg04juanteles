@@ -12,11 +12,23 @@ import java.util.List;
 public class ContratoAlunoService {
     private final ContratoAlunoRepository contratoAlunoRepository;
 
+    // Metodo save
     public ContratoAluno save(ContratoAluno contratoAluno) {
         return contratoAlunoRepository.save(contratoAluno);
     }
 
+    // Metodo findAll
     public List<ContratoAluno> findAll() {
         return contratoAlunoRepository.findAll();
+    }
+
+    // Metodo Update
+    public ContratoAluno update(ContratoAluno contratoAluno) {
+        return contratoAlunoRepository.save(contratoAluno);
+    }
+
+    // Metodo Delete
+    public void delete(Long id) {
+        contratoAlunoRepository.deleteById(id);
     }
 }
