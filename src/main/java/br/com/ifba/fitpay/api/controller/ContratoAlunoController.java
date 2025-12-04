@@ -1,7 +1,11 @@
 package br.com.ifba.fitpay.api.controller;
 
+import br.com.ifba.fitpay.api.features.contratoaluno.domain.dto.request.ContratoAlunoPutRequestDto;
+import br.com.ifba.fitpay.api.features.contratoaluno.domain.dto.response.ContratoAlunoGetResponseDto;
+import br.com.ifba.fitpay.api.features.contratoaluno.domain.dto.request.ContratoAlunoPostRequestDto;
 import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
 import br.com.ifba.fitpay.api.features.contratoaluno.domain.service.ContratoAlunoService;
+import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
 @RequestMapping("/contratos_alunos") // Define o prefixo da URL: http://localhost:8080/contratos_alunos
@@ -16,40 +21,53 @@ import java.util.List;
 public class ContratoAlunoController {
 
     private final ContratoAlunoService contratoAlunoService;
+    private final ObjectMapperUtil objectMapperUtil;
 
     // Endpoint para Salvar
-    @PostMapping("/save")
-    public ResponseEntity<ContratoAluno> save(@RequestBody ContratoAluno contratoAluno) {
-        // @RequestBody converte o JSON que vem do Postman para o objeto ContratoAluno
-        ContratoAluno contratoAlunoSalvo = contratoAlunoService.save(contratoAluno);
-        return ResponseEntity.status(HttpStatus.CREATED).body(contratoAlunoSalvo);
+    @PostMapping(path = "/save",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ContratoAlunoGetResponseDto> save(@RequestBody ContratoAlunoPostRequestDto contratoDto) {
+
+        // DTO -> Entity
+        ContratoAluno contratoEntity = objectMapperUtil.map(contratoDto, ContratoAluno.class);
+
+        // Service Salva
+        ContratoAluno contratoSalvo = contratoAlunoService.save(contratoEntity);
+
+        // Entity -> DTO Response
+        ContratoAlunoGetResponseDto response = objectMapperUtil.map(contratoSalvo, ContratoAlunoGetResponseDto.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Endpoint para Listar Todos
-    @GetMapping("/findall")
-    public ResponseEntity<List<ContratoAluno>> findAll() {
-        return ResponseEntity.ok(contratoAlunoService.findAll());
+    @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ContratoAlunoGetResponseDto>> findAll() {
+        return ResponseEntity.ok(
+                objectMapperUtil.mapAll(
+                        contratoAlunoService.findAll(),
+                        ContratoAlunoGetResponseDto.class
+                )
+        );
     }
 
-    // Endpoint para Deletar por ID
-    // {id} é a variável de caminho que identifica qual contrato excluir
-    @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        // Executa a exclusão primeiro
-        contratoAlunoService.delete(id);
-
-        // Depois retorna o status NO_CONTENT sem corpo (build)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    // Edpoint para atualizar o contrato do aluno
-    // A anotação @PutMapping mapeia requisições HTTP PUT para atualizações
+    // Endpoint para Atualizar
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody ContratoAluno contratoAluno) {
-        contratoAlunoService.update(contratoAluno);
-        // Retorna 204 No Content após atualizar com sucesso
+    public ResponseEntity<Void> update(@RequestBody ContratoAlunoPutRequestDto contratoDto) {
+
+        ContratoAluno contratoEntity = objectMapperUtil.map(contratoDto, ContratoAluno.class);
+        contratoAlunoService.update(contratoEntity);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Endpoint para Deletar
+    @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
+        contratoAlunoService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

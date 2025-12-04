@@ -4,7 +4,9 @@ import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface ContratoAlunoRepository extends JpaRepository<ContratoAluno, Long> {
+public interface ContratoAlunoRepository extends JpaRepository<ContratoAluno, UUID> {
 
 }

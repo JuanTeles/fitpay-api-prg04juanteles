@@ -9,7 +9,9 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.UUID;
 
+@Data
 @MappedSuperclass
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PersistenceEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

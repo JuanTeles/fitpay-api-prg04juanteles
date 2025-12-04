@@ -1,7 +1,11 @@
 package br.com.ifba.fitpay.api.controller;
 
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.dto.request.MovimentacaoPutRequestDto;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.dto.response.MovimentacaoGetResponseDto;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.dto.request.MovimentacaoPostRequestDto;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.model.MovimentacaoFinanceira;
-import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service.MovimentacaoFinanceiraService;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service.IMovimentacaoFinanceiraService;
+import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,47 +13,57 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
 @RequestMapping("/movimentacoes_financeiras") // Define o prefixo da URL: http://localhost:8080/movimentacoes_financeiras
 @RequiredArgsConstructor // Cria o construtor automaticamente
 public class MovimentacaoFinanceiraController {
 
-    private final MovimentacaoFinanceiraService movimentacaoFinanceiraService;
+    private final IMovimentacaoFinanceiraService movimentacaoService;
+    private final ObjectMapperUtil objectMapperUtil;
 
-    // Endpoint para Salvar
-    @PostMapping("/save")
-    public ResponseEntity<MovimentacaoFinanceira> save(@RequestBody MovimentacaoFinanceira movimentacaoFinanceira) {
-        // @RequestBody converte o JSON que vem do Postman para o objeto MovimentacaoFinanceira
-        MovimentacaoFinanceira movimentacaoFinanceiraSalva = movimentacaoFinanceiraService.save(movimentacaoFinanceira);
-        return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoFinanceiraSalva);
+    @PostMapping(path = "/save",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MovimentacaoGetResponseDto> save(@RequestBody MovimentacaoPostRequestDto dto) {
+
+        // DTO -> Entity
+        MovimentacaoFinanceira mov = objectMapperUtil.map(dto, MovimentacaoFinanceira.class);
+
+        // Service Save
+        MovimentacaoFinanceira movSalva = movimentacaoService.save(mov);
+
+        // Entity -> DTO Response
+        MovimentacaoGetResponseDto response = objectMapperUtil.map(movSalva, MovimentacaoGetResponseDto.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // Endpoint para Listar Todos
-    @GetMapping("/findall")
-    public ResponseEntity<List<MovimentacaoFinanceira>> findAll() {
-        return ResponseEntity.ok(movimentacaoFinanceiraService.findAll());
+    @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MovimentacaoGetResponseDto>> findAll() {
+        return ResponseEntity.ok(
+                objectMapperUtil.mapAll(
+                        movimentacaoService.findAll(),
+                        MovimentacaoGetResponseDto.class
+                )
+        );
     }
 
-    // Endpoint para Deletar por ID
-    // {id} é a variável de caminho que identifica qual movimentacao excluir
-    @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        // Executa a exclusão primeiro
-        movimentacaoFinanceiraService.delete(id);
-
-        // Depois retorna o status NO_CONTENT sem corpo (build)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    // Edpoint para atualizar a movimentação financeira
-    // A anotação @PutMapping mapeia requisições HTTP PUT para atualizações
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody MovimentacaoFinanceira movimentacaoFinanceira) {
-        movimentacaoFinanceiraService.update(movimentacaoFinanceira);
-        // Retorna 204 No Content após atualizar com sucesso
+    public ResponseEntity<Void> update(@RequestBody MovimentacaoPutRequestDto dto) {
+        // Mapeamento e atualização
+        MovimentacaoFinanceira mov = objectMapperUtil.map(dto, MovimentacaoFinanceira.class);
+
+        movimentacaoService.update(mov);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
+        movimentacaoService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

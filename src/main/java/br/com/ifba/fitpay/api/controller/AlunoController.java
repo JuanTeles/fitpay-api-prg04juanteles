@@ -1,55 +1,72 @@
 package br.com.ifba.fitpay.api.controller;
 
+import br.com.ifba.fitpay.api.features.aluno.domain.dto.request.AlunoPutRequestDto;
+import br.com.ifba.fitpay.api.features.aluno.domain.dto.response.AlunoGetResponseDto;
+import br.com.ifba.fitpay.api.features.aluno.domain.dto.request.AlunoPostRequestDto;
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
-import br.com.ifba.fitpay.api.features.aluno.domain.service.AlunoService;
+import br.com.ifba.fitpay.api.features.aluno.domain.service.IAlunoService;
+import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
+
 
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
 @RequestMapping("/alunos") // Define o prefixo da URL: http://localhost:8080/alunos
 @RequiredArgsConstructor // Cria o construtor automaticamente
 public class AlunoController {
 
-    private final AlunoService alunoService;
+    private final IAlunoService alunoService;
+    private final ObjectMapperUtil objectMapperUtil; // Injeção do Mapper
 
-    // Endpoint para Salvar
-    @PostMapping("/save")
-    public ResponseEntity<Aluno> save(@RequestBody Aluno aluno) {
-        // @RequestBody converte o JSON que vem do Postman para o objeto Aluno
-        Aluno alunoSalvo = alunoService.save(aluno);
-        return ResponseEntity.status(HttpStatus.CREATED).body(alunoSalvo);
+    // Endpoint para salvar
+    @PostMapping(path = "/save",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> save(@RequestBody AlunoPostRequestDto alunoPostRequestDto) {
+
+        // Converte DTO -> Entity
+        Aluno alunoEntity = objectMapperUtil.map(alunoPostRequestDto, Aluno.class);
+
+        // Salva no Service
+        Aluno alunoSalvo = alunoService.save(alunoEntity);
+
+        // Converte Entity -> ResponseDTO
+        AlunoGetResponseDto responseDto = objectMapperUtil.map(alunoSalvo, AlunoGetResponseDto.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // Endpoint para Listar Todos
-    @GetMapping("/findall")
-    public ResponseEntity<List<Aluno>> findAll() {
-        return ResponseEntity.ok(alunoService.findAll());
+    // Endpoint para listar todos
+    @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findAll() {
+        // Converte Lista de Entities -> Lista de DTOs
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(objectMapperUtil.mapAll(
+                        this.alunoService.findAll(),
+                        AlunoGetResponseDto.class));
     }
 
-    // Endpoint para Deletar por ID
-    // {id} é a variável de caminho que identifica qual aluno excluir
+    // Endpoint para excluir
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        // Executa a exclusão primeiro
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         alunoService.delete(id);
-
-        // Depois retorna o status NO_CONTENT sem corpo (build)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // Edpoint para atualizar o aluno
-    // A anotação @PutMapping mapeia requisições HTTP PUT para atualizações
+    // Endpoint para atualizar
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody Aluno aluno) {
+    public ResponseEntity<Void> update(@RequestBody AlunoPutRequestDto alunoDto) {
+
+        Aluno aluno = objectMapperUtil.map(alunoDto, Aluno.class);
         alunoService.update(aluno);
-        // Retorna 204 No Content após atualizar com sucesso
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
