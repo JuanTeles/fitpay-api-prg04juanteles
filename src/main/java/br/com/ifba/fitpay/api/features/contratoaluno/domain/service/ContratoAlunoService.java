@@ -5,6 +5,7 @@ import br.com.ifba.fitpay.api.features.contratoaluno.domain.repository.ContratoA
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class ContratoAlunoService implements IContratoAlunoService {
     private final ContratoAlunoRepository contratoAlunoRepository;
 
     @Override
+    @Transactional
     public ContratoAluno save(ContratoAluno contratoAluno) {
         // Regra de Negócio: Validação de Datas
         validarDatas(contratoAluno);
@@ -36,6 +38,7 @@ public class ContratoAlunoService implements IContratoAlunoService {
     }
 
     @Override
+    @Transactional
     public ContratoAluno update(ContratoAluno contratoAluno) {
         // Verifica se existe antes de atualizar
         ContratoAluno contratoExistente = this.findById(contratoAluno.getId());
@@ -48,6 +51,7 @@ public class ContratoAlunoService implements IContratoAlunoService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         // Garante que o recurso existe antes de tentar deletar
         this.findById(id);

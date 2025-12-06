@@ -6,6 +6,7 @@ import br.com.ifba.fitpay.api.features.aluno.domain.dto.request.AlunoPostRequest
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.aluno.domain.service.IAlunoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +28,7 @@ public class AlunoController {
     @PostMapping(path = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> save(@RequestBody AlunoPostRequestDto alunoPostRequestDto) {
+    public ResponseEntity<?> save(@RequestBody @Valid AlunoPostRequestDto alunoPostRequestDto) {
 
         // Converte DTO -> Entity
         Aluno alunoEntity = objectMapperUtil.map(alunoPostRequestDto, Aluno.class);
@@ -62,7 +63,7 @@ public class AlunoController {
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody AlunoPutRequestDto alunoDto) {
+    public ResponseEntity<Void> update(@RequestBody @Valid AlunoPutRequestDto alunoDto) {
 
         Aluno aluno = objectMapperUtil.map(alunoDto, Aluno.class);
         alunoService.update(aluno);

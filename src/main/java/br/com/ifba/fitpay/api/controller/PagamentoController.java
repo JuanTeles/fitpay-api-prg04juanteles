@@ -6,6 +6,7 @@ import br.com.ifba.fitpay.api.features.pagamento.domain.dto.request.PagamentoPos
 import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.service.IPagamentoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class PagamentoController {
     @PostMapping(path = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PagamentoGetResponseDto> save(@RequestBody PagamentoPostRequestDto pagamentoDto) {
+    public ResponseEntity<PagamentoGetResponseDto> save(@RequestBody @Valid PagamentoPostRequestDto pagamentoDto) {
 
         // DTO -> Entity
         Pagamento pagamento = objectMapperUtil.map(pagamentoDto, Pagamento.class);
@@ -54,7 +55,7 @@ public class PagamentoController {
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody PagamentoPutRequestDto pagamentoDto) {
+    public ResponseEntity<Void> update(@RequestBody @Valid PagamentoPutRequestDto pagamentoDto) {
 
         // Conversão
         Pagamento pagamento = objectMapperUtil.map(pagamentoDto, Pagamento.class);

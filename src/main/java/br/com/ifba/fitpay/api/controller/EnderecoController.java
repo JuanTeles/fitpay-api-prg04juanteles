@@ -6,6 +6,7 @@ import br.com.ifba.fitpay.api.features.endereco.domain.dto.request.EnderecoPostR
 import br.com.ifba.fitpay.api.features.endereco.domain.model.Endereco;
 import br.com.ifba.fitpay.api.features.endereco.domain.service.IEnderecoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class EnderecoController {
     @PostMapping(path = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EnderecoGetResponseDto> save(@RequestBody EnderecoPostRequestDto enderecoDto) {
+    public ResponseEntity<EnderecoGetResponseDto> save(@RequestBody @Valid EnderecoPostRequestDto enderecoDto) {
 
         // DTO -> Entity
         Endereco endereco = objectMapperUtil.map(enderecoDto, Endereco.class);
@@ -53,7 +54,7 @@ public class EnderecoController {
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody EnderecoPutRequestDto enderecoDto) {
+    public ResponseEntity<Void> update(@RequestBody @Valid EnderecoPutRequestDto enderecoDto) {
 
         Endereco endereco = objectMapperUtil.map(enderecoDto, Endereco.class);
 

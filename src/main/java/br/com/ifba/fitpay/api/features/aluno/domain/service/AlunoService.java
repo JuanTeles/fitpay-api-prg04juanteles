@@ -5,6 +5,7 @@ import br.com.ifba.fitpay.api.features.aluno.domain.repository.IAlunoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +18,7 @@ public class AlunoService implements IAlunoService{
     private final IAlunoRepository alunoRepository;
 
     // Regra: Salvar
+    @Transactional
     public Aluno save(Aluno aluno) {
         // Validação de CPF Único
         if (alunoRepository.existsByCpf(aluno.getCpf())) {
@@ -44,6 +46,7 @@ public class AlunoService implements IAlunoService{
     }
 
     // Regra: Atualizar
+    @Transactional
     public Aluno update(Aluno aluno) {
         // Verifica se o aluno existe antes de tentar atualizar
         Aluno alunoExistente = this.findById(aluno.getId());
@@ -65,6 +68,7 @@ public class AlunoService implements IAlunoService{
     }
 
     // Regra: Deletar
+    @Transactional
     public void delete(UUID id) {
         // Garante que existe antes de deletar
         this.findById(id);

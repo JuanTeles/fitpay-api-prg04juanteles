@@ -5,6 +5,7 @@ import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.repository.
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     private final MovimentacaoFinanceiraRepository repository;
 
     @Override
+    @Transactional
     public MovimentacaoFinanceira save(MovimentacaoFinanceira movimentacao) {
         // Regras de validação
         validarMovimentacao(movimentacao);
@@ -41,6 +43,7 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     }
 
     @Override
+    @Transactional
     public MovimentacaoFinanceira update(MovimentacaoFinanceira movimentacao) {
         // Garante existência
         this.findById(movimentacao.getId());
@@ -51,6 +54,7 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         this.findById(id);
         repository.deleteById(id);

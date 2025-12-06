@@ -6,6 +6,7 @@ import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.dto.request
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.model.MovimentacaoFinanceira;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service.IMovimentacaoFinanceiraService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class MovimentacaoFinanceiraController {
     @PostMapping(path = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MovimentacaoGetResponseDto> save(@RequestBody MovimentacaoPostRequestDto dto) {
+    public ResponseEntity<MovimentacaoGetResponseDto> save(@RequestBody @Valid MovimentacaoPostRequestDto dto) {
 
         // DTO -> Entity
         MovimentacaoFinanceira mov = objectMapperUtil.map(dto, MovimentacaoFinanceira.class);
@@ -53,7 +54,7 @@ public class MovimentacaoFinanceiraController {
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody MovimentacaoPutRequestDto dto) {
+    public ResponseEntity<Void> update(@RequestBody @Valid MovimentacaoPutRequestDto dto) {
         // Mapeamento e atualização
         MovimentacaoFinanceira mov = objectMapperUtil.map(dto, MovimentacaoFinanceira.class);
 

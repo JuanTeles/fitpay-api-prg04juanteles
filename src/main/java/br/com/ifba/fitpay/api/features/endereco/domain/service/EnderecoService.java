@@ -5,6 +5,7 @@ import br.com.ifba.fitpay.api.features.endereco.domain.repository.EnderecoReposi
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException; //
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class EnderecoService implements IEnderecoService { // [cite: 937]
     private final EnderecoRepository enderecoRepository;
 
     @Override
+    @Transactional
     public Endereco save(Endereco endereco) {
         validarRegrasNegocio(endereco);
 
@@ -34,6 +36,7 @@ public class EnderecoService implements IEnderecoService { // [cite: 937]
     }
 
     @Override
+    @Transactional
     public Endereco update(Endereco endereco) {
         // Garante que o endereço existe no banco
         this.findById(endereco.getId());
@@ -45,6 +48,7 @@ public class EnderecoService implements IEnderecoService { // [cite: 937]
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         this.findById(id);
         enderecoRepository.deleteById(id);

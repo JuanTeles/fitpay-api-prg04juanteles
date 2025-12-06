@@ -5,6 +5,7 @@ import br.com.ifba.fitpay.api.features.pagamento.domain.repository.PagamentoRepo
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +18,7 @@ public class PagamentoService implements IPagamentoService {
     private final PagamentoRepository pagamentoRepository;
 
     @Override
+    @Transactional
     public Pagamento save(Pagamento pagamento) {
         // Regras de validação antes de salvar
         validarPagamento(pagamento);
@@ -41,6 +43,7 @@ public class PagamentoService implements IPagamentoService {
     }
 
     @Override
+    @Transactional
     public Pagamento update(Pagamento pagamento) {
         // Garante existência
         this.findById(pagamento.getId());
@@ -52,6 +55,7 @@ public class PagamentoService implements IPagamentoService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         this.findById(id);
         pagamentoRepository.deleteById(id);

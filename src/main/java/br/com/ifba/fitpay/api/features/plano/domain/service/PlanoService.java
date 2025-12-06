@@ -5,6 +5,7 @@ import br.com.ifba.fitpay.api.features.plano.domain.repository.PlanoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class PlanoService implements IPlanoService {
     private final PlanoRepository planoRepository;
 
     @Override
+    @Transactional
     public Plano save(Plano plano) {
         validarPlano(plano);
         return planoRepository.save(plano);
@@ -33,6 +35,7 @@ public class PlanoService implements IPlanoService {
     }
 
     @Override
+    @Transactional
     public Plano update(Plano plano) {
         // Garante que o plano existe antes de atualizar
         this.findById(plano.getId());
@@ -43,6 +46,7 @@ public class PlanoService implements IPlanoService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         this.findById(id);
         planoRepository.deleteById(id);

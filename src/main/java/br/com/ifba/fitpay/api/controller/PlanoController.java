@@ -6,6 +6,7 @@ import br.com.ifba.fitpay.api.features.plano.domain.dto.request.PlanoPostRequest
 import br.com.ifba.fitpay.api.features.plano.domain.model.Plano;
 import br.com.ifba.fitpay.api.features.plano.domain.service.IPlanoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class PlanoController {
     @PostMapping(path = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PlanoGetResponseDto> save(@RequestBody PlanoPostRequestDto planoDto) {
+    public ResponseEntity<PlanoGetResponseDto> save(@RequestBody @Valid PlanoPostRequestDto planoDto) {
 
         // DTO -> Entity
         Plano plano = objectMapperUtil.map(planoDto, Plano.class);
@@ -53,7 +54,7 @@ public class PlanoController {
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody PlanoPutRequestDto planoDto) {
+    public ResponseEntity<Void> update(@RequestBody @Valid PlanoPutRequestDto planoDto) {
 
         Plano plano = objectMapperUtil.map(planoDto, Plano.class);
         planoService.update(plano);

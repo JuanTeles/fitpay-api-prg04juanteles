@@ -6,6 +6,7 @@ import br.com.ifba.fitpay.api.features.contratoaluno.domain.dto.request.Contrato
 import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
 import br.com.ifba.fitpay.api.features.contratoaluno.domain.service.ContratoAlunoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +28,7 @@ public class ContratoAlunoController {
     @PostMapping(path = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ContratoAlunoGetResponseDto> save(@RequestBody ContratoAlunoPostRequestDto contratoDto) {
+    public ResponseEntity<ContratoAlunoGetResponseDto> save(@RequestBody @Valid ContratoAlunoPostRequestDto contratoDto) {
 
         // DTO -> Entity
         ContratoAluno contratoEntity = objectMapperUtil.map(contratoDto, ContratoAluno.class);
@@ -56,7 +57,7 @@ public class ContratoAlunoController {
     @PutMapping(path = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody ContratoAlunoPutRequestDto contratoDto) {
+    public ResponseEntity<Void> update(@RequestBody @Valid ContratoAlunoPutRequestDto contratoDto) {
 
         ContratoAluno contratoEntity = objectMapperUtil.map(contratoDto, ContratoAluno.class);
         contratoAlunoService.update(contratoEntity);
