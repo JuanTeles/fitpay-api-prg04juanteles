@@ -4,10 +4,11 @@ import br.com.ifba.fitpay.api.features.endereco.domain.model.Endereco;
 import br.com.ifba.fitpay.api.features.endereco.domain.repository.EnderecoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException; //
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,8 +26,8 @@ public class EnderecoService implements IEnderecoService { // [cite: 937]
     }
 
     @Override
-    public List<Endereco> findAll() {
-        return enderecoRepository.findAll();
+    public Page<Endereco> findAll(Pageable pageable) {
+        return enderecoRepository.findAll(pageable);
     }
 
     @Override

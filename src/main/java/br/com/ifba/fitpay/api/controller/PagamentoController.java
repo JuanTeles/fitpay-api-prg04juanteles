@@ -8,6 +8,8 @@ import br.com.ifba.fitpay.api.features.pagamento.domain.service.IPagamentoServic
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,13 +44,10 @@ public class PagamentoController {
     }
 
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PagamentoGetResponseDto>> findAll() {
-        return ResponseEntity.ok(
-                objectMapperUtil.mapAll(
-                        pagamentoService.findAll(),
-                        PagamentoGetResponseDto.class
-                )
-        );
+    public ResponseEntity<Page<PagamentoGetResponseDto>> findAll(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.pagamentoService.findAll(pageable)
+                        .map(c -> objectMapperUtil.map(c, PagamentoGetResponseDto.class)));
     }
 
     // Endpoint Update (Simplificado)

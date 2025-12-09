@@ -8,12 +8,13 @@ import br.com.ifba.fitpay.api.features.endereco.domain.service.IEnderecoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
@@ -42,13 +43,10 @@ public class EnderecoController {
     }
 
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EnderecoGetResponseDto>> findAll() {
-        return ResponseEntity.ok(
-                objectMapperUtil.mapAll(
-                        enderecoService.findAll(),
-                        EnderecoGetResponseDto.class
-                )
-        );
+    public ResponseEntity<Page<EnderecoGetResponseDto>> findAll(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.enderecoService.findAll(pageable)
+                        .map(c -> objectMapperUtil.map(c, EnderecoGetResponseDto.class)));
     }
 
     @PutMapping(path = "/update",

@@ -8,6 +8,8 @@ import br.com.ifba.fitpay.api.features.aluno.domain.service.IAlunoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,13 +45,11 @@ public class AlunoController {
     }
 
     // Endpoint para listar todos
-    @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAll() {
-        // Converte Lista de Entities -> Lista de DTOs
+    @GetMapping("/findall")
+    public ResponseEntity<Page<AlunoGetResponseDto>> findAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(objectMapperUtil.mapAll(
-                        this.alunoService.findAll(),
-                        AlunoGetResponseDto.class));
+                .body(this.alunoService.findAll(pageable)
+                        .map(c -> objectMapperUtil.map(c, AlunoGetResponseDto.class)));
     }
 
     // Endpoint para excluir

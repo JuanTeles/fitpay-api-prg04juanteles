@@ -4,11 +4,12 @@ import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.model.Movim
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.repository.MovimentacaoFinanceiraRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,8 +33,8 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     }
 
     @Override
-    public List<MovimentacaoFinanceira> findAll() {
-        return repository.findAll();
+    public Page<MovimentacaoFinanceira> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override

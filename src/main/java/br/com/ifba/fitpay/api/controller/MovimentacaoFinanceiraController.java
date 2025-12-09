@@ -8,12 +8,13 @@ import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service.IMo
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
@@ -42,13 +43,10 @@ public class MovimentacaoFinanceiraController {
     }
 
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<MovimentacaoGetResponseDto>> findAll() {
-        return ResponseEntity.ok(
-                objectMapperUtil.mapAll(
-                        movimentacaoService.findAll(),
-                        MovimentacaoGetResponseDto.class
-                )
-        );
+    public ResponseEntity<Page<MovimentacaoGetResponseDto>> findAll(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.movimentacaoService.findAll(pageable)
+                        .map(c -> objectMapperUtil.map(c, MovimentacaoGetResponseDto.class)));
     }
 
     @PutMapping(path = "/update",

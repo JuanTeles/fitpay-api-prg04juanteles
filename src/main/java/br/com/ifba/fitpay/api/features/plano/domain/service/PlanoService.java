@@ -4,10 +4,11 @@ import br.com.ifba.fitpay.api.features.plano.domain.model.Plano;
 import br.com.ifba.fitpay.api.features.plano.domain.repository.PlanoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,8 +25,8 @@ public class PlanoService implements IPlanoService {
     }
 
     @Override
-    public List<Plano> findAll() {
-        return planoRepository.findAll();
+    public Page<Plano> findAll(Pageable pageable) {
+        return planoRepository.findAll(pageable);
     }
 
     @Override

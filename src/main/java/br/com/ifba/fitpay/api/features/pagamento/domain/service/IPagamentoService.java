@@ -1,14 +1,16 @@
 package br.com.ifba.fitpay.api.features.pagamento.domain.service;
 
 import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.UUID;
 
 public interface IPagamentoService {
 
     Pagamento save(Pagamento pagamento);
 
-    List<Pagamento> findAll();
+    Page<Pagamento> findAll(Pageable pageable);
 
     Pagamento findById(UUID id);
 

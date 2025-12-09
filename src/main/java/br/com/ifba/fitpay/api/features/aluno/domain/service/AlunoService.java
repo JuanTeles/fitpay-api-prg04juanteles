@@ -4,11 +4,12 @@ import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.aluno.domain.repository.IAlunoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,6 +19,7 @@ public class AlunoService implements IAlunoService{
     private final IAlunoRepository alunoRepository;
 
     // Regra: Salvar
+    @Override
     @Transactional
     public Aluno save(Aluno aluno) {
         // Validação de CPF Único
@@ -34,11 +36,13 @@ public class AlunoService implements IAlunoService{
     }
 
     // Listar Todos (Sem regras complexas, apenas repassa)
-    public List<Aluno> findAll() {
-        return alunoRepository.findAll();
+    @Override
+    public Page<Aluno> findAll(Pageable pageable) {
+        return alunoRepository.findAll(pageable);
     }
 
     // Regra: Buscar por ID
+    @Override
     public Aluno findById(UUID id) {
         // Validação de Existência com Tratamento de Erro
         return alunoRepository.findById(id)
@@ -46,6 +50,7 @@ public class AlunoService implements IAlunoService{
     }
 
     // Regra: Atualizar
+    @Override
     @Transactional
     public Aluno update(Aluno aluno) {
         // Verifica se o aluno existe antes de tentar atualizar
@@ -68,6 +73,7 @@ public class AlunoService implements IAlunoService{
     }
 
     // Regra: Deletar
+    @Override
     @Transactional
     public void delete(UUID id) {
         // Garante que existe antes de deletar

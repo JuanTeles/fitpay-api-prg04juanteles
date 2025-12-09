@@ -4,11 +4,12 @@ import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.repository.PagamentoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,8 +33,8 @@ public class PagamentoService implements IPagamentoService {
     }
 
     @Override
-    public List<Pagamento> findAll() {
-        return pagamentoRepository.findAll();
+    public Page<Pagamento> findAll(Pageable pageable) {
+        return pagamentoRepository.findAll(pageable);
     }
 
     @Override

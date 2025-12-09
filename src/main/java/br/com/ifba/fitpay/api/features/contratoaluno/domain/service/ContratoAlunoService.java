@@ -4,10 +4,11 @@ import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
 import br.com.ifba.fitpay.api.features.contratoaluno.domain.repository.ContratoAlunoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,8 +27,8 @@ public class ContratoAlunoService implements IContratoAlunoService {
     }
 
     @Override
-    public List<ContratoAluno> findAll() {
-        return contratoAlunoRepository.findAll();
+    public Page<ContratoAluno> findAll(Pageable pageable) {
+        return contratoAlunoRepository.findAll(pageable);
     }
 
     @Override
