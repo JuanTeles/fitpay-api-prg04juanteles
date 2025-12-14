@@ -13,17 +13,19 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class Aluno extends PersistenceEntity {
 
-    @Column(nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
+    @Column(name = "telefone")
     private String telefone;
 
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "data_matricula", nullable = false)
     private LocalDate dataMatricula;
 
 

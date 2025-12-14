@@ -3,7 +3,6 @@ package br.com.ifba.fitpay.api.features.contratoaluno.domain.model;
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.plano.domain.model.Plano;
 import br.com.ifba.fitpay.api.infraestructure.model.PersistenceEntity;
-
 import br.com.ifba.fitpay.api.features.contratoaluno.domain.enums.StatusMatricula;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,9 +15,13 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class ContratoAluno extends PersistenceEntity {
 
+    @Column(name = "data_inicio", nullable = false)
     private LocalDate dataInicio;
+
+    @Column(name = "data_fim", nullable = false)
     private LocalDate dataFim;
 
+    @Column(name = "status_matricula", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusMatricula status;
 

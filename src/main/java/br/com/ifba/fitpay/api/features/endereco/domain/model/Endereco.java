@@ -13,23 +13,24 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Endereco extends PersistenceEntity {
 
-    @Column(nullable = false)
+    @Column(name = "logradouro", nullable = false)
     private String logradouro;
 
-    @Column(nullable = false)
+    @Column(name = "numero", nullable = false)
     private String numero;
 
+    @Column(name = "complemento")
     private String complemento;
 
-    @Column(nullable = false)
+    @Column(name = "bairro", nullable = false)
     private String bairro;
 
-    @Column(nullable = false)
+    @Column(name = "cidade", nullable = false)
     private String cidade;
 
-    @Column(nullable = false)
+    @Column(name = "uf", nullable = false)
     private String uf;
 
-    @Column(nullable = false)
+    @Column(name = "cep", nullable = false)
     private String cep;
 }

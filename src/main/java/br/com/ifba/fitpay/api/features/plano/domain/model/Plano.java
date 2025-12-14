@@ -13,13 +13,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Plano extends PersistenceEntity {
 
-    @Column(nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(name = "valor", nullable = false)
     private Double valor;
 
+    @Column(name = "duracao_dias", nullable = false)
     private Integer duracaoDias;
 
+    @Column(name = "descricao")
     private String descricao;
 }
