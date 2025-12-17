@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface PlanoRepository extends JpaRepository<Plano, UUID> {
+public interface PlanoRepository extends JpaRepository<Plano, Long> {
 
     @Query("select p from Plano p where p.nome = ?1")
     Optional<Plano> findByNome(String nome);

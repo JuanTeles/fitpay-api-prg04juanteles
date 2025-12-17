@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -44,6 +43,6 @@ public class PagamentoPostRequestDto {
     @Data
     public static class ContratoIdDto {
         @NotNull(message = "O ID do contrato é obrigatório")
-        private UUID id;
+        private Long id;
     }
 }

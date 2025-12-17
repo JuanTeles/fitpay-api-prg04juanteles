@@ -4,17 +4,15 @@ import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.UUID;
-
 public interface IContratoAlunoService {
 
     ContratoAluno save(ContratoAluno contratoAluno);
 
     Page<ContratoAluno> findAll(Pageable pageable);
 
-    ContratoAluno findById(UUID id);
+    ContratoAluno findById(Long id);
 
     ContratoAluno update(ContratoAluno contratoAluno);
 
-    void delete(UUID id);
+    void delete(Long id);
 }

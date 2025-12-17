@@ -7,14 +7,13 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @Data
 @MappedSuperclass
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PersistenceEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include @ToString.Include
-    @Getter private UUID id;
+    @Getter private Long id;
 }

@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +15,7 @@ public class EnderecoPutRequestDto {
 
     // O ID do Endereço é necessário para saber qual atualizar
     @NotNull(message = "O ID do endereço é obrigatório")
-    private UUID id;
+    private Long id;
 
     @JsonProperty("logradouro")
     @NotBlank(message = "O logradouro é obrigatório")

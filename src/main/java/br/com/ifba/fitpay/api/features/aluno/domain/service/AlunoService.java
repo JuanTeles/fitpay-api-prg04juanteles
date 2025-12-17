@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class AlunoService implements IAlunoService{
 
     // Regra: Buscar por ID
     @Override
-    public Aluno findById(UUID id) {
+    public Aluno findById(Long id) {
         // Validação de Existência com Tratamento de Erro
         return alunoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Aluno não encontrado com o ID: " + id));
@@ -75,7 +74,7 @@ public class AlunoService implements IAlunoService{
     // Regra: Deletar
     @Override
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         // Garante que existe antes de deletar
         this.findById(id);
 

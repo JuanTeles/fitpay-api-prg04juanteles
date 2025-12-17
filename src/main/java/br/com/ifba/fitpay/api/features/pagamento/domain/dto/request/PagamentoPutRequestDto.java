@@ -2,7 +2,6 @@ package br.com.ifba.fitpay.api.features.pagamento.domain.dto.request;
 
 import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +18,7 @@ public class PagamentoPutRequestDto {
 
     // O ID do Pagamento é obrigatório para atualização
     @NotNull(message = "O ID do pagamento é obrigatório")
-    private UUID id;
+    private Long id;
 
     @JsonProperty("data_pagamento")
     @NotNull(message = "A data do pagamento é obrigatória")
@@ -47,6 +45,6 @@ public class PagamentoPutRequestDto {
     @Data
     public static class ContratoIdDto {
         @NotNull(message = "O ID do contrato é obrigatório")
-        private UUID id;
+        private Long id;
     }
 }

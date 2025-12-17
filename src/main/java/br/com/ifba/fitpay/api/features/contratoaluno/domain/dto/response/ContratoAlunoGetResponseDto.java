@@ -8,14 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContratoAlunoGetResponseDto {
 
-    private UUID id;
+    private Long id;
 
     @JsonProperty("data_inicio")
     private LocalDate dataInicio;

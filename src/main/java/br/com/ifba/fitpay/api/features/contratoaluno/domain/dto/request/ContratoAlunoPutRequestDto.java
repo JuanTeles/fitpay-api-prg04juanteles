@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +17,7 @@ public class ContratoAlunoPutRequestDto {
 
     // O ID do Contrato é obrigatório para saber qual registro atualizar
     @NotNull(message = "O ID do contrato é obrigatório para a atualização")
-    private UUID id;
+    private Long id;
 
     @JsonProperty("data_inicio")
     @NotNull(message = "A data de início é obrigatória")
@@ -47,12 +46,12 @@ public class ContratoAlunoPutRequestDto {
     @Data
     public static class AlunoIdDto {
         @NotNull(message = "O ID do aluno é obrigatório")
-        private UUID id;
+        private Long id;
     }
 
     @Data
     public static class PlanoIdDto {
         @NotNull(message = "O ID do plano é obrigatório")
-        private UUID id; // Mantive UUID conforme seu código, mas verifique se no banco Plano é UUID ou Long
+        private Long id; // Mantive UUID conforme seu código, mas verifique se no banco Plano é UUID ou Long
     }
 }

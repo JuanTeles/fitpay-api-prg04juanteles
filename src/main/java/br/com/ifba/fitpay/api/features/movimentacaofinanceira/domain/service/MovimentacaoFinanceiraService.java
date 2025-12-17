@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     }
 
     @Override
-    public MovimentacaoFinanceira findById(UUID id) {
+    public MovimentacaoFinanceira findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new BusinessException("Movimentação Financeira não encontrada com o ID: " + id));
     }
@@ -56,7 +55,7 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
 
     @Override
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.findById(id);
         repository.deleteById(id);
     }

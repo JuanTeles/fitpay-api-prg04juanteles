@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ public class PagamentoService implements IPagamentoService {
     }
 
     @Override
-    public Pagamento findById(UUID id) {
+    public Pagamento findById(Long id) {
         return pagamentoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Pagamento não encontrado com o ID: " + id));
     }
@@ -57,7 +56,7 @@ public class PagamentoService implements IPagamentoService {
 
     @Override
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.findById(id);
         pagamentoRepository.deleteById(id);
     }

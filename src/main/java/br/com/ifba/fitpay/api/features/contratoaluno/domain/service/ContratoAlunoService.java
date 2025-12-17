@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class ContratoAlunoService implements IContratoAlunoService {
@@ -32,7 +30,7 @@ public class ContratoAlunoService implements IContratoAlunoService {
     }
 
     @Override
-    public ContratoAluno findById(UUID id) {
+    public ContratoAluno findById(Long id) {
         // BusinessException se não encontrar
         return contratoAlunoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Contrato não encontrado com o ID: " + id));
@@ -42,7 +40,7 @@ public class ContratoAlunoService implements IContratoAlunoService {
     @Transactional
     public ContratoAluno update(ContratoAluno contratoAluno) {
         // Verifica se existe antes de atualizar
-        ContratoAluno contratoExistente = this.findById(contratoAluno.getId());
+        // ContratoAluno contratoExistente = this.findById(contratoAluno.getId());
 
         // Regra de Negócio: Validação de Datas na atualização também
         validarDatas(contratoAluno);
@@ -53,7 +51,7 @@ public class ContratoAlunoService implements IContratoAlunoService {
 
     @Override
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         // Garante que o recurso existe antes de tentar deletar
         this.findById(id);
 

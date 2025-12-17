@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class EnderecoService implements IEnderecoService { // [cite: 937]
@@ -31,7 +29,7 @@ public class EnderecoService implements IEnderecoService { // [cite: 937]
     }
 
     @Override
-    public Endereco findById(UUID id) {
+    public Endereco findById(Long id) {
         return enderecoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Endereço não encontrado com o ID: " + id));
     }
@@ -50,7 +48,7 @@ public class EnderecoService implements IEnderecoService { // [cite: 937]
 
     @Override
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.findById(id);
         enderecoRepository.deleteById(id);
     }

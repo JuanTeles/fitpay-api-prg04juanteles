@@ -8,14 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovimentacaoGetResponseDto {
 
-    private UUID id;
+    private Long id;
 
     @JsonProperty("data_hora")
     private LocalDateTime dataHora;

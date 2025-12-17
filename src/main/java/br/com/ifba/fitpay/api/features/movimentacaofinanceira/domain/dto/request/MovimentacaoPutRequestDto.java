@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +20,7 @@ public class MovimentacaoPutRequestDto {
 
     // O ID da Movimentação é obrigatório para atualização
     @NotNull(message = "O ID da movimentação é obrigatório")
-    private UUID id;
+    private Long id;
 
     @JsonProperty("data_hora")
     @NotNull(message = "A data e hora são obrigatórias")
@@ -52,6 +51,6 @@ public class MovimentacaoPutRequestDto {
     @Data
     public static class PagamentoIdDto {
         @NotNull(message = "O ID do pagamento de origem é obrigatório")
-        private UUID id;
+        private Long id;
     }
 }

@@ -6,16 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface IAlunoRepository extends JpaRepository<Aluno, UUID> {
+public interface IAlunoRepository extends JpaRepository<Aluno, Long> {
 
     // Metodo para verificar existência
     boolean existsByCpf(String cpf);
 
     // Verifica se existe algum CPF igual, mas que NÃO seja do próprio usuário
-    boolean existsByCpfAndIdNot(String cpf, UUID id);
+    boolean existsByCpfAndIdNot(String cpf, Long id);
 
     @Query("select a from Aluno a where a.email = ?1")
     Optional<Aluno> findByEmail(String email);

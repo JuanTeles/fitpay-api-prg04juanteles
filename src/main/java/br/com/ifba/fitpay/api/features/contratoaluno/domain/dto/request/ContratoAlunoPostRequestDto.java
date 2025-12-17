@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -43,7 +42,7 @@ public class ContratoAlunoPostRequestDto {
     @Data
     public static class AlunoIdDto {
         @NotNull(message = "O ID do aluno é obrigatório")
-        private UUID id;
+        private Long id;
     }
 
     @Data

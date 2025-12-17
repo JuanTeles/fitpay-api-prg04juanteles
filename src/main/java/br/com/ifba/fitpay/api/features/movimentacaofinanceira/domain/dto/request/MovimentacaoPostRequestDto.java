@@ -46,6 +46,6 @@ public class MovimentacaoPostRequestDto {
     @Data
     public static class PagamentoIdDto {
         @NotNull(message = "O ID do pagamento de origem é obrigatório")
-        private Long id; // Nota: Verifique se no banco é Long ou UUID. Se for UUID, altere aqui.
+        private Long id;
     }
 }

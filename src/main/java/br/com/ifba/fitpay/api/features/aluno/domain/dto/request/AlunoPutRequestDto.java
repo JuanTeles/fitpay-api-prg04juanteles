@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class AlunoPutRequestDto {
 
     // No PUT, o ID é crucial para saber quem atualizar
     @NotNull(message = "O ID do aluno é obrigatório para atualização")
-    private UUID id;
+    private Long id;
 
     @JsonProperty(value = "nome")
     @NotBlank(message = "O nome não pode estar vazio")

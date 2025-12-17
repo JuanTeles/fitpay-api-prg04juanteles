@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface PagamentoRepository extends JpaRepository<Pagamento, UUID> {
+public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
 
     // Custom Query: Busca pagamentos de um determinado mês/ano
     @Query("select p from Pagamento p where p.referenciaPeriodo = ?1")

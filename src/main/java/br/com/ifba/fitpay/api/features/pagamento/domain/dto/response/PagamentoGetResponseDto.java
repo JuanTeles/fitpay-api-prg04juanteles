@@ -7,14 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PagamentoGetResponseDto {
 
-    private UUID id;
+    private Long id;
 
     @JsonProperty("data_pagamento")
     private LocalDate dataPagamento;

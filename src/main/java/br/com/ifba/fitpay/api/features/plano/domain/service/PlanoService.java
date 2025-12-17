@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class PlanoService implements IPlanoService {
@@ -30,7 +28,7 @@ public class PlanoService implements IPlanoService {
     }
 
     @Override
-    public Plano findById(UUID id) {
+    public Plano findById(Long id) {
         return planoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Plano não encontrado com o ID: " + id));
     }
@@ -48,7 +46,7 @@ public class PlanoService implements IPlanoService {
 
     @Override
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.findById(id);
         planoRepository.deleteById(id);
     }

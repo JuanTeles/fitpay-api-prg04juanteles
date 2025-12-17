@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +17,7 @@ public class PlanoPutRequestDto {
 
     // O ID do Plano é obrigatório para atualização
     @NotNull(message = "O ID do plano é obrigatório")
-    private UUID id;
+    private Long id;
 
     @JsonProperty("nome")
     @NotBlank(message = "O nome do plano é obrigatório")

@@ -6,11 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface EnderecoRepository extends JpaRepository<Endereco, UUID> {
+public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
 
     // Custom Query: Busca endereços por CEP (pode haver mais de um usuário no mesmo CEP, mas aqui retornamos lista)
     @Query("select e from Endereco e where e.cep = ?1")

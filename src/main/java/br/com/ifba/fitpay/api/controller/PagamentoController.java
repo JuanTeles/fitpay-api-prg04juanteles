@@ -15,9 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
-
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
 @RequestMapping("/pagamentos") // Define o prefixo da URL: http://localhost:8080/pagamentos
 @RequiredArgsConstructor // Cria o construtor automaticamente
@@ -64,7 +61,7 @@ public class PagamentoController {
     }
 
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         pagamentoService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
