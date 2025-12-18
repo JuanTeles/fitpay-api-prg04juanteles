@@ -40,6 +40,18 @@ public class EnderecoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping(path = "/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EnderecoGetResponseDto> findById(@PathVariable("id") Long id) {
+
+        // Busca a entidade no Service
+        Endereco endereco = enderecoService.findById(id);
+
+        // Converte para DTO de Resposta
+        EnderecoGetResponseDto response = objectMapperUtil.map(endereco, EnderecoGetResponseDto.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<EnderecoGetResponseDto>> findAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
