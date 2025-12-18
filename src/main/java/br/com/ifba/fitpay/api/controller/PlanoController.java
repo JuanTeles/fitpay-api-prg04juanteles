@@ -40,6 +40,18 @@ public class PlanoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping(path = "/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PlanoGetResponseDto> findById(@PathVariable("id") Long id) {
+
+        Plano planoEncontrado = planoService.findById(id);
+
+        // Converte a Entidade (Plano) para o DTO de Resposta (PlanoGetResponseDto)
+        PlanoGetResponseDto response = objectMapperUtil.map(planoEncontrado, PlanoGetResponseDto.class);
+
+        // Retorna status 200 (OK) com o objeto no corpo
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<PlanoGetResponseDto>> findAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
