@@ -38,7 +38,6 @@ public class AlunoPostRequestDto {
     private String email;
 
     @JsonProperty(value = "data_matricula")
-    @NotNull(message = "A data de matrícula é obrigatória")
     private LocalDate dataMatricula;
 
     // Endereco é um objeto, podemos validar com @NotNull e @Valid (cascade)

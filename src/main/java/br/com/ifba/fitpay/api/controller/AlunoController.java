@@ -67,4 +67,15 @@ public class AlunoController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // Endpoint para buscar pelo id
+    @GetMapping("/find/{id}")
+    public ResponseEntity<AlunoGetResponseDto> findById(@PathVariable("id") Long id) {
+        Aluno aluno = alunoService.findById(id);
+
+        // Converte para DTO
+        AlunoGetResponseDto responseDto = objectMapperUtil.map(aluno, AlunoGetResponseDto.class);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

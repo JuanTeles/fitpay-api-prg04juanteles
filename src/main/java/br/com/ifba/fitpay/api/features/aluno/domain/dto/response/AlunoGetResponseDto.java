@@ -16,13 +16,15 @@ public class AlunoGetResponseDto {
     @JsonProperty(value = "nome")
     private String nome;
 
+    // ADICIONAR ESTE CAMPO
+    @JsonProperty(value = "cpf")
+    private String cpf;
+
     @JsonProperty(value = "email")
     private String email;
 
     @JsonProperty(value = "telefone")
     private String telefone;
-
-    // CPF omitido aqui por ser um dado sensível
 
     @JsonProperty(value = "endereco")
     private Endereco endereco;
