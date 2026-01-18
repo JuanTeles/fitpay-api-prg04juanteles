@@ -39,7 +39,6 @@ public class AlunoPutRequestDto {
     private String email;
 
     @JsonProperty(value = "data_matricula")
-    @NotNull(message = "A data de matrícula é obrigatória")
     private LocalDate dataMatricula;
 
     // O @Valid aqui é essencial para validar o objeto Endereco aninhado
