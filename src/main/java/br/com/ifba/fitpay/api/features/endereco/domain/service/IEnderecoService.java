@@ -11,4 +11,5 @@ public interface IEnderecoService {
     Endereco findById(Long id);
     Endereco update(Endereco endereco);
     void delete(Long id);
+    Page<Endereco> findByLogradouroOrBairro(String search, Pageable pageable);
 }

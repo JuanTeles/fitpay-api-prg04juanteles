@@ -53,10 +53,20 @@ public class EnderecoController {
     }
 
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<EnderecoGetResponseDto>> findAll(Pageable pageable) {
+    public ResponseEntity<Page<EnderecoGetResponseDto>> findAll(
+            Pageable pageable,
+            @RequestParam(required = false) String search // Adicionado parametro
+    ) {
+        Page<Endereco> enderecos;
+
+        if (search != null && !search.isBlank()) {
+            enderecos = enderecoService.findByLogradouroOrBairro(search, pageable);
+        } else {
+            enderecos = enderecoService.findAll(pageable);
+        }
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.enderecoService.findAll(pageable)
-                        .map(c -> objectMapperUtil.map(c, EnderecoGetResponseDto.class)));
+                .body(enderecos.map(c -> objectMapperUtil.map(c, EnderecoGetResponseDto.class)));
     }
 
     @PutMapping(path = "/update",

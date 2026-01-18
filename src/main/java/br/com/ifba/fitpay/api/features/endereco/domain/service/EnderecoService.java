@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class EnderecoService implements IEnderecoService { // [cite: 937]
+public class EnderecoService implements IEnderecoService {
 
     private final EnderecoRepository enderecoRepository;
 
@@ -88,5 +88,11 @@ public class EnderecoService implements IEnderecoService { // [cite: 937]
 
         // Opcional: Atualiza o objeto com o CEP limpo (apenas números) para salvar padronizado no banco
         endereco.setCep(cepLimpo);
+    }
+
+    @Override
+    public Page<Endereco> findByLogradouroOrBairro(String search, Pageable pageable) {
+        // usa o 'search' para os dois campos (busca "search" no logradouro OU "search" no bairro)
+        return enderecoRepository.findByLogradouroContainingIgnoreCaseOrBairroContainingIgnoreCase(search, search, pageable);
     }
 }
