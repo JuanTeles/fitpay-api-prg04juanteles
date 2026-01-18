@@ -41,12 +41,23 @@ public class AlunoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // Endpoint para listar todos
+    // Endpoint para listar (com ou sem busca)
     @GetMapping("/findall")
-    public ResponseEntity<Page<AlunoGetResponseDto>> findAll(Pageable pageable) {
+    public ResponseEntity<Page<AlunoGetResponseDto>> findAll(
+            Pageable pageable,
+            @RequestParam(required = false) String search
+    ) {
+        Page<Aluno> alunos;
+
+        // Se tiver pesquisa, busca filtrado. Se não, busca tudo.
+        if (search != null && !search.isBlank()) {
+            alunos = alunoService.findByNomeOrCpf(search, pageable);
+        } else {
+            alunos = alunoService.findAll(pageable);
+        }
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.alunoService.findAll(pageable)
-                        .map(c -> objectMapperUtil.map(c, AlunoGetResponseDto.class)));
+                .body(alunos.map(c -> objectMapperUtil.map(c, AlunoGetResponseDto.class)));
     }
 
     // Endpoint para excluir

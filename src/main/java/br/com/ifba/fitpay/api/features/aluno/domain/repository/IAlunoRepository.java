@@ -1,6 +1,8 @@
 package br.com.ifba.fitpay.api.features.aluno.domain.repository;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,4 +20,7 @@ public interface IAlunoRepository extends JpaRepository<Aluno, Long> {
 
     @Query("select a from Aluno a where a.email = ?1")
     Optional<Aluno> findByEmail(String email);
+
+    // Busca alunos onde o Nome CONTÉM o texto OU o CPF CONTÉM o texto (ignorando maiúsculas/minúsculas)
+    Page<Aluno> findByNomeContainingIgnoreCaseOrCpfContaining(String nome, String cpf, Pageable pageable);
 }

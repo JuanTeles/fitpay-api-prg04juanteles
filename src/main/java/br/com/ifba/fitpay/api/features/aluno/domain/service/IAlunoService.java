@@ -11,5 +11,5 @@ public interface IAlunoService {
     Aluno findById(Long id);
     Aluno update(Aluno aluno);
     void delete(Long id);
-
+    Page<Aluno> findByNomeOrCpf(String search, Pageable pageable);
 }

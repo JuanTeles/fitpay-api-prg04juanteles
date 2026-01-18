@@ -80,4 +80,9 @@ public class AlunoService implements IAlunoService{
 
         alunoRepository.deleteById(id);
     }
+
+    @Override
+    public Page<Aluno> findByNomeOrCpf(String search, Pageable pageable) {
+        return alunoRepository.findByNomeContainingIgnoreCaseOrCpfContaining(search, search, pageable);
+    }
 }
