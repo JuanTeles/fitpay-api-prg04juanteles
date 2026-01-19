@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
-@RequestMapping("/contratos_alunos") // Define o prefixo da URL: http://localhost:8080/contratos_alunos
+@RequestMapping("/matriculas") // Define o prefixo da URL: http://localhost:8080/matriculas_alunos
 @RequiredArgsConstructor // Cria o construtor automaticamente
 public class MatriculaController {
 

@@ -14,4 +14,6 @@ public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
     // Custom Query: Busca todos os contratos com determinado status
     @Query("select c from Matricula c where c.status = ?1")
     List<Matricula> findByStatus(StatusMatricula status);
+
+    boolean existsByAlunoIdAndStatus(Long alunoId, StatusMatricula status);
 }

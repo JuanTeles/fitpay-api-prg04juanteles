@@ -1,5 +1,6 @@
 package br.com.ifba.fitpay.api.features.matricula.domain.service;
 
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
 import br.com.ifba.fitpay.api.features.matricula.domain.repository.IMatriculaRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
@@ -20,6 +21,10 @@ public class MatriculaService implements IMatriculaService {
     public Matricula save(Matricula matricula) {
         // Regra de Negócio: Validação de Datas
         validarDatas(matricula);
+
+        if (IMatriculaRepository.existsByAlunoIdAndStatus(matricula.getAluno().getId(), StatusMatricula.ATIVO)) {
+            throw new BusinessException("Este aluno já possui uma matrícula ATIVA. Cancele a anterior antes de criar uma nova.");
+        }
 
         return IMatriculaRepository.save(matricula);
     }
