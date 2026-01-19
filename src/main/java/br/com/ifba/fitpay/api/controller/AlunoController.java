@@ -46,21 +46,16 @@ public class AlunoController {
     @GetMapping("/findall")
     public ResponseEntity<Page<AlunoGetResponseDto>> findAll(
             Pageable pageable,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) StatusMatricula status // Novo parâmetro opcional
     ) {
-        Page<Aluno> alunos;
+        // Chama o service com os 3 parâmetros
+        Page<Aluno> alunos = alunoService.findAll(pageable, search, status);
 
-        if (search != null && !search.isBlank()) {
-            alunos = alunoService.findByNomeOrCpf(search, pageable);
-        } else {
-            alunos = alunoService.findAll(pageable);
-        }
-
-        // Mapeia de Entidade para DTO e verifica se existe matrícula ATIVA
+        // Mantém a lógica de mapeamento e verificação de "ativo" que fizemos antes
         Page<AlunoGetResponseDto> alunosDto = alunos.map(aluno -> {
             AlunoGetResponseDto dto = objectMapperUtil.map(aluno, AlunoGetResponseDto.class);
 
-            // Se a lista de matrículas não for nula e tiver pelo menos uma com status ATIVO
             boolean estaAtivo = aluno.getMatriculas() != null &&
                     aluno.getMatriculas().stream()
                             .anyMatch(m -> m.getStatus() == StatusMatricula.ATIVO);

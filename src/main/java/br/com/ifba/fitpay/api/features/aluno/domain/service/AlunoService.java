@@ -2,6 +2,7 @@ package br.com.ifba.fitpay.api.features.aluno.domain.service;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.aluno.domain.repository.IAlunoRepository;
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,10 +35,25 @@ public class AlunoService implements IAlunoService{
         return alunoRepository.save(aluno);
     }
 
-    // Listar Todos (Sem regras complexas, apenas repassa)
+    // Listar Todos ou busca
     @Override
-    public Page<Aluno> findAll(Pageable pageable) {
-        return alunoRepository.findAll(pageable);
+    public Page<Aluno> findAll(Pageable pageable, String search, StatusMatricula status) {
+        // Tem busca E tem status
+        if (status != null && (search != null && !search.isBlank())) {
+            return alunoRepository.findByNomeOrCpfAndStatusMatricula(search, status, pageable);
+        }
+        // Apenas status
+        else if (status != null) {
+            return alunoRepository.findByStatusMatricula(status, pageable);
+        }
+        // Apenas busca
+        else if (search != null && !search.isBlank()) {
+            return alunoRepository.findByNomeContainingIgnoreCaseOrCpfContaining(search, search, pageable);
+        }
+        // Nenhum filtro (busca tudo)
+        else {
+            return alunoRepository.findAll(pageable);
+        }
     }
 
     // Regra: Buscar por ID
