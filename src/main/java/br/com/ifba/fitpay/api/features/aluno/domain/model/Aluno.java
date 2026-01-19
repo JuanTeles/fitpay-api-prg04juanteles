@@ -1,6 +1,7 @@
 package br.com.ifba.fitpay.api.features.aluno.domain.model;
 
 import br.com.ifba.fitpay.api.features.endereco.domain.model.Endereco;
+import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
 import br.com.ifba.fitpay.api.infraestructure.model.PersistenceEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -28,6 +29,9 @@ public class Aluno extends PersistenceEntity {
     @Column(name = "data_matricula", nullable = false)
     private LocalDate dataMatricula;
 
+    // Mapeia a relação inversa para podermos verificar as matrículas do aluno
+    @OneToMany(mappedBy = "aluno", fetch = FetchType.LAZY)
+    private java.util.List<Matricula> matriculas;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")

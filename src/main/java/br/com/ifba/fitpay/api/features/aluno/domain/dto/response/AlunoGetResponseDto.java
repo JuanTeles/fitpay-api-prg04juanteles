@@ -28,4 +28,8 @@ public class AlunoGetResponseDto {
 
     @JsonProperty(value = "endereco")
     private Endereco endereco;
+
+    // diz ao frontend se o aluno tem matrícula ativa
+    @JsonProperty(value = "ativo")
+    private boolean ativo;
 }

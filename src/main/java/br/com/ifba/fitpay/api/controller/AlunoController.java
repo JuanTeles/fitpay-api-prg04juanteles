@@ -5,6 +5,7 @@ import br.com.ifba.fitpay.api.features.aluno.domain.dto.response.AlunoGetRespons
 import br.com.ifba.fitpay.api.features.aluno.domain.dto.request.AlunoPostRequestDto;
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.aluno.domain.service.IAlunoService;
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,15 +50,26 @@ public class AlunoController {
     ) {
         Page<Aluno> alunos;
 
-        // Se tiver pesquisa, busca filtrado. Se não, busca tudo.
         if (search != null && !search.isBlank()) {
             alunos = alunoService.findByNomeOrCpf(search, pageable);
         } else {
             alunos = alunoService.findAll(pageable);
         }
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(alunos.map(c -> objectMapperUtil.map(c, AlunoGetResponseDto.class)));
+        // Mapeia de Entidade para DTO e verifica se existe matrícula ATIVA
+        Page<AlunoGetResponseDto> alunosDto = alunos.map(aluno -> {
+            AlunoGetResponseDto dto = objectMapperUtil.map(aluno, AlunoGetResponseDto.class);
+
+            // Se a lista de matrículas não for nula e tiver pelo menos uma com status ATIVO
+            boolean estaAtivo = aluno.getMatriculas() != null &&
+                    aluno.getMatriculas().stream()
+                            .anyMatch(m -> m.getStatus() == StatusMatricula.ATIVO);
+
+            dto.setAtivo(estaAtivo);
+            return dto;
+        });
+
+        return ResponseEntity.status(HttpStatus.OK).body(alunosDto);
     }
 
     // Endpoint para excluir
