@@ -1,6 +1,6 @@
-package br.com.ifba.fitpay.api.features.contratoaluno.domain.dto.request;
+package br.com.ifba.fitpay.api.features.matricula.domain.dto.request;
 
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -13,33 +13,29 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContratoAlunoPutRequestDto {
-
-    // O ID do Contrato é obrigatório para saber qual registro atualizar
-    @NotNull(message = "O ID do contrato é obrigatório para a atualização")
-    private Long id;
+public class MatriculaPostRequestDto {
 
     @JsonProperty("data_inicio")
-    @NotNull(message = "A data de início é obrigatória")
+    @NotNull(message = "A data de início do contrato é obrigatória")
     private LocalDate dataInicio;
 
     @JsonProperty("data_fim")
-    @NotNull(message = "A data de fim é obrigatória")
+    @NotNull(message = "A data de fim do contrato é obrigatória")
     private LocalDate dataFim;
 
     @NotNull(message = "O status da matrícula é obrigatório")
     private StatusMatricula status;
 
-    // Referência ao Aluno
+    // Para o ModelMapper STRICT funcionar, a estrutura deve bater com a Entidade.
+    // A entidade tem um objeto "aluno", então aqui criamos um objeto para receber o ID.
     @JsonProperty("aluno")
     @NotNull(message = "Os dados do aluno são obrigatórios")
-    @Valid // Garante a validação do ID dentro da classe AlunoIdDto
+    @Valid // Garante que o Java entre na classe AlunoIdDto para validar o ID lá dentro
     private AlunoIdDto aluno;
 
-    // Referência ao Plano
     @JsonProperty("plano")
     @NotNull(message = "Os dados do plano são obrigatórios")
-    @Valid // Garante a validação do ID dentro da classe PlanoIdDto
+    @Valid // Garante que o Java entre na classe PlanoIdDto para validar o ID lá dentro
     private PlanoIdDto plano;
 
     // Classes estáticas internas para facilitar o mapeamento de ID
@@ -52,6 +48,6 @@ public class ContratoAlunoPutRequestDto {
     @Data
     public static class PlanoIdDto {
         @NotNull(message = "O ID do plano é obrigatório")
-        private Long id; // Mantive UUID conforme seu código, mas verifique se no banco Plano é UUID ou Long
+        private Long id;
     }
 }

@@ -76,7 +76,7 @@ public class PagamentoService implements IPagamentoService {
         }
 
         // Regra 3: Deve estar vinculado a um contrato
-        if (pagamento.getContratoAluno() == null || pagamento.getContratoAluno().getId() == null) {
+        if (pagamento.getMatricula() == null || pagamento.getMatricula().getId() == null) {
             throw new BusinessException("O pagamento deve estar vinculado a um Contrato de Aluno válido.");
         }
     }

@@ -2,9 +2,9 @@ package br.com.ifba.fitpay.api.features.pagamento.domain.repository;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.aluno.domain.repository.IAlunoRepository;
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.enums.StatusMatricula;
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.repository.ContratoAlunoRepository;
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.repository.IMatriculaRepository;
 import br.com.ifba.fitpay.api.features.endereco.domain.model.Endereco;
 import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
@@ -30,7 +30,7 @@ class PagamentoRepositoryTest {
     private PagamentoRepository pagamentoRepository;
 
     @Autowired
-    private ContratoAlunoRepository contratoRepository;
+    private IMatriculaRepository matriculaRepository;
 
     @Autowired
     private IAlunoRepository alunoRepository;
@@ -47,8 +47,8 @@ class PagamentoRepositoryTest {
         Plano plano = this.planoRepository.save(this.createPlano());
 
         // Salva um Contrato para criar o Pagamento
-        ContratoAluno contrato = this.createContrato(aluno, plano);
-        this.contratoRepository.save(contrato);
+        Matricula contrato = this.createContrato(aluno, plano);
+        this.matriculaRepository.save(contrato);
 
         // Cria e Salva o Pagamento
         Pagamento pagamento = this.createPagamento(contrato);
@@ -60,7 +60,7 @@ class PagamentoRepositoryTest {
         // Verificação
         Assertions.assertThat(pagamentos).isNotEmpty();
         Assertions.assertThat(pagamentos.get(0).getValorPago()).isEqualTo(100.00);
-        Assertions.assertThat(pagamentos.get(0).getContratoAluno()).isNotNull();
+        Assertions.assertThat(pagamentos.get(0).getMatricula()).isNotNull();
     }
 
     // Tenta buscar pagamentos de um periodo que não existe.
@@ -89,18 +89,18 @@ class PagamentoRepositoryTest {
     }
 
     // Métodos Auxiliares
-    private Pagamento createPagamento(ContratoAluno contrato) {
+    private Pagamento createPagamento(Matricula matricula) {
         Pagamento p = new Pagamento();
         p.setValorPago(100.00);
         p.setReferenciaPeriodo("Janeiro/2025");
         p.setMetodoPagamento(MetodoPagamento.PIX);
         p.setDataPagamento(LocalDate.now());
-        p.setContratoAluno(contrato);
+        p.setMatricula(matricula);
         return p;
     }
 
-    private ContratoAluno createContrato(Aluno aluno, Plano plano) {
-        ContratoAluno c = new ContratoAluno();
+    private Matricula createContrato(Aluno aluno, Plano plano) {
+        Matricula c = new Matricula();
         c.setAluno(aluno);
         c.setPlano(plano);
         c.setStatus(StatusMatricula.ATIVO);

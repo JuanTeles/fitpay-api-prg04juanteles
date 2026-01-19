@@ -1,7 +1,7 @@
-package br.com.ifba.fitpay.api.features.contratoaluno.domain.dto.response;
+package br.com.ifba.fitpay.api.features.matricula.domain.dto.response;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.dto.response.AlunoGetResponseDto;
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContratoAlunoGetResponseDto {
+public class MatriculaGetResponseDto {
 
     private Long id;
 

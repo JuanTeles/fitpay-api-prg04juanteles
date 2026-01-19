@@ -1,9 +1,9 @@
-package br.com.ifba.fitpay.api.features.contratoaluno.domain.repository;
+package br.com.ifba.fitpay.api.features.matricula.domain.repository;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.aluno.domain.repository.IAlunoRepository;
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.enums.StatusMatricula;
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
 import br.com.ifba.fitpay.api.features.endereco.domain.model.Endereco;
 import br.com.ifba.fitpay.api.features.plano.domain.model.Plano;
 import br.com.ifba.fitpay.api.features.plano.domain.repository.PlanoRepository;
@@ -21,10 +21,10 @@ import java.util.List;
 @DataJpaTest
 @ActiveProfiles("test")
 @DisplayName("Testes para Contrato Aluno Repository")
-class ContratoAlunoRepositoryTest {
+class IMatriculaRepositoryTest {
 
     @Autowired
-    private ContratoAlunoRepository contratoRepository;
+    private IMatriculaRepository contratoRepository;
 
     @Autowired
     private IAlunoRepository alunoRepository;
@@ -40,11 +40,11 @@ class ContratoAlunoRepositoryTest {
         Aluno aluno = this.alunoRepository.save(this.createAluno());
         Plano plano = this.planoRepository.save(this.createPlano());
 
-        ContratoAluno contrato = this.createContrato(aluno, plano);
+        Matricula contrato = this.createContrato(aluno, plano);
         this.contratoRepository.save(contrato);
 
         // Busca o contrato pelo status da matricula
-        List<ContratoAluno> contratosAtivos = this.contratoRepository.findByStatus(StatusMatricula.ATIVO);
+        List<Matricula> contratosAtivos = this.contratoRepository.findByStatus(StatusMatricula.ATIVO);
 
         // Verificação
         Assertions.assertThat(contratosAtivos).isNotEmpty();
@@ -57,7 +57,7 @@ class ContratoAlunoRepositoryTest {
     @DisplayName("Deve retornar lista vazia quando não houver contratos com o status")
     void findByStatus_whenNotFound() {
         // Buscar por status INATIVO sem ter criado nenhum
-        List<ContratoAluno> contratos = this.contratoRepository.findByStatus(StatusMatricula.INATIVO);
+        List<Matricula> contratos = this.contratoRepository.findByStatus(StatusMatricula.INATIVO);
 
         // Verificação
         Assertions.assertThat(contratos).isEmpty();
@@ -68,7 +68,7 @@ class ContratoAlunoRepositoryTest {
     @DisplayName("Deve lançar DataIntegrityViolationException quando salvar sem aluno ou plano")
     void save_throwsException_whenDependenciesAreNull() {
         // Cria Contrato sem Aluno e Sem Plano
-        ContratoAluno contratoInvalido = new ContratoAluno();
+        Matricula contratoInvalido = new Matricula();
         contratoInvalido.setDataInicio(LocalDate.now());
         contratoInvalido.setDataFim(LocalDate.now().plusMonths(1));
         contratoInvalido.setStatus(StatusMatricula.ATIVO);
@@ -79,8 +79,8 @@ class ContratoAlunoRepositoryTest {
     }
 
     // Métodos Auxiliares para criar os Objetos
-    private ContratoAluno createContrato(Aluno aluno, Plano plano) {
-        ContratoAluno contrato = new ContratoAluno();
+    private Matricula createContrato(Aluno aluno, Plano plano) {
+        Matricula contrato = new Matricula();
         contrato.setAluno(aluno);
         contrato.setPlano(plano);
         contrato.setStatus(StatusMatricula.ATIVO);

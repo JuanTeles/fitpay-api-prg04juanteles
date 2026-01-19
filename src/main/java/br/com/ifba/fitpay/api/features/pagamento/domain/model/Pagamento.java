@@ -1,6 +1,6 @@
 package br.com.ifba.fitpay.api.features.pagamento.domain.model;
 
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
+import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
 import br.com.ifba.fitpay.api.infraestructure.model.PersistenceEntity;
 import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import jakarta.persistence.*;
@@ -28,6 +28,6 @@ public class Pagamento extends PersistenceEntity {
     private MetodoPagamento metodoPagamento;
 
     @ManyToOne
-    @JoinColumn(name = "contrato_id", nullable = false)
-    private ContratoAluno contratoAluno;
+    @JoinColumn(name = "matricula_id", nullable = false)
+    private Matricula matricula;
 }

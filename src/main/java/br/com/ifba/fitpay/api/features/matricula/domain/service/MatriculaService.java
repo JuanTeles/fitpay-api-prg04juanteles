@@ -1,7 +1,7 @@
-package br.com.ifba.fitpay.api.features.contratoaluno.domain.service;
+package br.com.ifba.fitpay.api.features.matricula.domain.service;
 
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.model.ContratoAluno;
-import br.com.ifba.fitpay.api.features.contratoaluno.domain.repository.ContratoAlunoRepository;
+import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.repository.IMatriculaRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,42 +11,42 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ContratoAlunoService implements IContratoAlunoService {
+public class MatriculaService implements IMatriculaService {
 
-    private final ContratoAlunoRepository contratoAlunoRepository;
+    private final IMatriculaRepository IMatriculaRepository;
 
     @Override
     @Transactional
-    public ContratoAluno save(ContratoAluno contratoAluno) {
+    public Matricula save(Matricula matricula) {
         // Regra de Negócio: Validação de Datas
-        validarDatas(contratoAluno);
+        validarDatas(matricula);
 
-        return contratoAlunoRepository.save(contratoAluno);
+        return IMatriculaRepository.save(matricula);
     }
 
     @Override
-    public Page<ContratoAluno> findAll(Pageable pageable) {
-        return contratoAlunoRepository.findAll(pageable);
+    public Page<Matricula> findAll(Pageable pageable) {
+        return IMatriculaRepository.findAll(pageable);
     }
 
     @Override
-    public ContratoAluno findById(Long id) {
+    public Matricula findById(Long id) {
         // BusinessException se não encontrar
-        return contratoAlunoRepository.findById(id)
+        return IMatriculaRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Contrato não encontrado com o ID: " + id));
     }
 
     @Override
     @Transactional
-    public ContratoAluno update(ContratoAluno contratoAluno) {
+    public Matricula update(Matricula matricula) {
         // Verifica se existe antes de atualizar
         // ContratoAluno contratoExistente = this.findById(contratoAluno.getId());
 
         // Regra de Negócio: Validação de Datas na atualização também
-        validarDatas(contratoAluno);
+        validarDatas(matricula);
 
 
-        return contratoAlunoRepository.save(contratoAluno);
+        return IMatriculaRepository.save(matricula);
     }
 
     @Override
@@ -55,14 +55,14 @@ public class ContratoAlunoService implements IContratoAlunoService {
         // Garante que o recurso existe antes de tentar deletar
         this.findById(id);
 
-        contratoAlunoRepository.deleteById(id);
+        IMatriculaRepository.deleteById(id);
     }
 
     /**
      * Metodo auxiliar privado para validar regras de data.
      * Impede que um contrato termine antes de começar.
      */
-    private void validarDatas(ContratoAluno contrato) {
+    private void validarDatas(Matricula contrato) {
         if (contrato.getDataInicio() != null && contrato.getDataFim() != null) {
             if (contrato.getDataFim().isBefore(contrato.getDataInicio())) {
                 throw new BusinessException("A Data Final do contrato não pode ser anterior à Data Inicial.");

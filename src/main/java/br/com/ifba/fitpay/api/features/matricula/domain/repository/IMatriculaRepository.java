@@ -1,0 +1,17 @@
+package br.com.ifba.fitpay.api.features.matricula.domain.repository;
+
+import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
+
+    // Custom Query: Busca todos os contratos com determinado status
+    @Query("select c from Matricula c where c.status = ?1")
+    List<Matricula> findByStatus(StatusMatricula status);
+}
