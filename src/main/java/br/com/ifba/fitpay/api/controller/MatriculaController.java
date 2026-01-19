@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController // Diz ao Spring que isso é uma API REST (retorna JSON)
 @RequestMapping("/matriculas") // Define o prefixo da URL: http://localhost:8080/matriculas_alunos
 @RequiredArgsConstructor // Cria o construtor automaticamente
@@ -66,5 +68,17 @@ public class MatriculaController {
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         matriculaService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/aluno/{alunoId}")
+    public ResponseEntity<List<MatriculaGetResponseDto>> findByAluno(@PathVariable Long alunoId) {
+        List<Matricula> matriculas = matriculaService.findByAluno(alunoId);
+
+        // Mapeia a lista de entidades para DTOs
+        List<MatriculaGetResponseDto> dtos = matriculas.stream()
+                .map(m -> objectMapperUtil.map(m, MatriculaGetResponseDto.class))
+                .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 }

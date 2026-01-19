@@ -2,6 +2,7 @@ package br.com.ifba.fitpay.api.features.matricula.domain.dto.response;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.dto.response.AlunoGetResponseDto;
 import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.plano.domain.dto.response.PlanoGetResponseDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +29,6 @@ public class MatriculaGetResponseDto {
     @JsonProperty("aluno")
     private AlunoGetResponseDto aluno;
 
-    // Supondo que você terá um DTO de Plano, ou pode retornar apenas o nome/ID por enquanto
-    @JsonProperty("plano_id")
-    private Long planoId;
+    @JsonProperty("plano")
+    private PlanoGetResponseDto plano;
 }

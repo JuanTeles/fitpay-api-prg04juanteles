@@ -16,4 +16,7 @@ public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
     List<Matricula> findByStatus(StatusMatricula status);
 
     boolean existsByAlunoIdAndStatus(Long alunoId, StatusMatricula status);
+
+    // Busca todas as matrículas de um aluno, ordenadas da mais recente para a mais antiga
+    List<Matricula> findByAlunoIdOrderByDataInicioDesc(Long alunoId);
 }

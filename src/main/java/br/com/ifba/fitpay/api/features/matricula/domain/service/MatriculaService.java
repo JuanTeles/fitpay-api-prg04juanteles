@@ -10,11 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MatriculaService implements IMatriculaService {
 
-    private final IMatriculaRepository IMatriculaRepository;
+    private final IMatriculaRepository matriculaRepository;
 
     @Override
     @Transactional
@@ -22,22 +24,22 @@ public class MatriculaService implements IMatriculaService {
         // Regra de Negócio: Validação de Datas
         validarDatas(matricula);
 
-        if (IMatriculaRepository.existsByAlunoIdAndStatus(matricula.getAluno().getId(), StatusMatricula.ATIVO)) {
+        if (matriculaRepository.existsByAlunoIdAndStatus(matricula.getAluno().getId(), StatusMatricula.ATIVO)) {
             throw new BusinessException("Este aluno já possui uma matrícula ATIVA. Cancele a anterior antes de criar uma nova.");
         }
 
-        return IMatriculaRepository.save(matricula);
+        return matriculaRepository.save(matricula);
     }
 
     @Override
     public Page<Matricula> findAll(Pageable pageable) {
-        return IMatriculaRepository.findAll(pageable);
+        return matriculaRepository.findAll(pageable);
     }
 
     @Override
     public Matricula findById(Long id) {
         // BusinessException se não encontrar
-        return IMatriculaRepository.findById(id)
+        return matriculaRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Contrato não encontrado com o ID: " + id));
     }
 
@@ -51,7 +53,7 @@ public class MatriculaService implements IMatriculaService {
         validarDatas(matricula);
 
 
-        return IMatriculaRepository.save(matricula);
+        return matriculaRepository.save(matricula);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class MatriculaService implements IMatriculaService {
         // Garante que o recurso existe antes de tentar deletar
         this.findById(id);
 
-        IMatriculaRepository.deleteById(id);
+        matriculaRepository.deleteById(id);
     }
 
     /**
@@ -73,5 +75,10 @@ public class MatriculaService implements IMatriculaService {
                 throw new BusinessException("A Data Final do contrato não pode ser anterior à Data Inicial.");
             }
         }
+    }
+
+    @Override
+    public List<Matricula> findByAluno(Long alunoId) {
+        return matriculaRepository.findByAlunoIdOrderByDataInicioDesc(alunoId);
     }
 }
