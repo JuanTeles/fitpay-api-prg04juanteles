@@ -66,13 +66,23 @@ public class MatriculaService implements IMatriculaService {
     @Transactional
     public Matricula update(Matricula matricula) {
         // Verifica se existe antes de atualizar
-        // ContratoAluno contratoExistente = this.findById(contratoAluno.getId());
+        Matricula matriculaExistente = this.findById(matricula.getId());
 
-        // Regra de Negócio: Validação de Datas na atualização também
+        // Permite ATIVO (para trancar) ou TRANCADO (para destrancar/ativar).
+        if (matriculaExistente.getStatus() != StatusMatricula.ATIVO &&
+                matriculaExistente.getStatus() != StatusMatricula.TRANCADO) {
+            throw new BusinessException("Apenas matrículas ATIVAS ou TRANCADAS podem ser alteradas.");
+        }
+
+        // Validação de Datas
         validarDatas(matricula);
 
+        // Atualiza apenas os campos permitidos no objeto existente
+        matriculaExistente.setStatus(matricula.getStatus());
+        matriculaExistente.setDataInicio(matricula.getDataInicio());
+        matriculaExistente.setDataFim(matricula.getDataFim());
 
-        return matriculaRepository.save(matricula);
+        return matriculaRepository.save(matriculaExistente);
     }
 
     @Override
