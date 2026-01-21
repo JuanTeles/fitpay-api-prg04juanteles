@@ -3,6 +3,8 @@ package br.com.ifba.fitpay.api.features.matricula.domain.service;
 import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
 import br.com.ifba.fitpay.api.features.matricula.domain.repository.IMatriculaRepository;
+import br.com.ifba.fitpay.api.features.plano.domain.model.Plano;
+import br.com.ifba.fitpay.api.features.plano.domain.repository.PlanoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import java.util.List;
 public class MatriculaService implements IMatriculaService {
 
     private final IMatriculaRepository matriculaRepository;
+    private final PlanoRepository planoRepository;
 
     @Override
     @Transactional
@@ -24,9 +27,21 @@ public class MatriculaService implements IMatriculaService {
         // Regra de Negócio: Validação de Datas
         validarDatas(matricula);
 
+        // Verifica duplicidade de matrícula ativa
         if (matriculaRepository.existsByAlunoIdAndStatus(matricula.getAluno().getId(), StatusMatricula.ATIVO)) {
-            throw new BusinessException("Este aluno já possui uma matrícula ATIVA. Cancele a anterior antes de criar uma nova.");
+            throw new BusinessException("Este aluno já possui uma matrícula ATIVA. Cancele a anterior antes de criar uma nova."); //
         }
+
+        // Congelamento do Preço (Validação pela Fonte da Verdade)
+        Plano planoReal = planoRepository.findById(matricula.getPlano().getId())
+                .orElseThrow(() -> new BusinessException("Plano não encontrado com o ID informado."));
+
+        // Seta o valor da matrícula com o valor do plano do banco
+        // garante que ninguém forjou o preço na requisição
+        matricula.setValorFechado(planoReal.getValor());
+
+        // Vincula o objeto plano completo para garantir consistência no save
+        matricula.setPlano(planoReal);
 
         return matriculaRepository.save(matricula);
     }

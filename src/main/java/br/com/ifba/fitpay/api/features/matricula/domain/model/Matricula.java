@@ -7,6 +7,7 @@ import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.time.LocalDate;
 
 @Data
@@ -24,6 +25,9 @@ public class Matricula extends PersistenceEntity {
     @Column(name = "status_matricula", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusMatricula status;
+
+    @Column(name = "valor_fechado", nullable = false)
+    private Double valorFechado;
 
     @ManyToOne
     @JoinColumn(name = "aluno_id", nullable = false)
