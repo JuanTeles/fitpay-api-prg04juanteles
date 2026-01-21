@@ -81,4 +81,17 @@ public class MatriculaController {
 
         return ResponseEntity.ok(dtos);
     }
+
+    @GetMapping("/dashboard/novas-no-mes")
+    public ResponseEntity<Long> countNovasNoMes() {
+        long count = matriculaService.countNovasMatriculasNoMes();
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/dashboard/a-renovar")
+    public ResponseEntity<Long> countARenovar() {
+        // Define fixo em 7 dias
+        long count = matriculaService.countMatriculasARenovar(7);
+        return ResponseEntity.ok(count);
+    }
 }

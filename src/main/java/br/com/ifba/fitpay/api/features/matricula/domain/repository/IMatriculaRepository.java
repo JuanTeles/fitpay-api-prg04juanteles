@@ -23,4 +23,10 @@ public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
 
     // busca matriculas com status X que venceram antes da data Y
     List<Matricula> findByStatusAndDataFimBefore(StatusMatricula status, LocalDate data);
+
+    // Conta matrículas criadas num intervalo de datas
+    long countByDataInicioBetween(LocalDate inicio, LocalDate fim);
+
+    // [Conta matrículas ativas que vencem dentro de um intervalo de datas
+    long countByDataFimBetweenAndStatus(LocalDate inicio, LocalDate fim, StatusMatricula status);
 }

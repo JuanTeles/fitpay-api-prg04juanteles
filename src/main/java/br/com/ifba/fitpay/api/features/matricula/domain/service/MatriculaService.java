@@ -111,6 +111,24 @@ public class MatriculaService implements IMatriculaService {
         return matriculaRepository.findByAlunoIdOrderByDataInicioDesc(alunoId);
     }
 
+    @Override
+    public long countNovasMatriculasNoMes() {
+        LocalDate agora = LocalDate.now();
+        LocalDate inicioMes = agora.withDayOfMonth(1);
+        LocalDate fimMes = agora.withDayOfMonth(agora.lengthOfMonth());
+
+        return matriculaRepository.countByDataInicioBetween(inicioMes, fimMes);
+    }
+
+    @Override
+    public long countMatriculasARenovar(int dias) {
+        LocalDate hoje = LocalDate.now();
+        LocalDate limite = hoje.plusDays(dias);
+
+        // Busca entre HOJE e DATA_LIMITE que estejam ATIVOS
+        return matriculaRepository.countByDataFimBetweenAndStatus(hoje, limite, StatusMatricula.ATIVO);
+    }
+
     /**
      * Verifica diariamente se há matrículas vencidas e as inativa.
      * Cron "0 0 0 * * *" significa: Segundo 0, Minuto 0, Hora 0 (Meia-noite), Todos os dias.

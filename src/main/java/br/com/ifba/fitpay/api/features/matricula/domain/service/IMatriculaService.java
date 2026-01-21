@@ -14,4 +14,6 @@ public interface IMatriculaService {
     Matricula update(Matricula matricula);
     void delete(Long id);
     List<Matricula> findByAluno(Long alunoId);
+    long countNovasMatriculasNoMes();
+    long countMatriculasARenovar(int dias);
 }
