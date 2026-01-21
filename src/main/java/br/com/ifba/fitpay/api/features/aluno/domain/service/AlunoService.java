@@ -2,6 +2,9 @@ package br.com.ifba.fitpay.api.features.aluno.domain.service;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.model.Aluno;
 import br.com.ifba.fitpay.api.features.aluno.domain.repository.IAlunoRepository;
+import br.com.ifba.fitpay.api.features.endereco.domain.model.Endereco;
+import br.com.ifba.fitpay.api.features.endereco.domain.repository.EnderecoRepository;
+import br.com.ifba.fitpay.api.features.endereco.domain.service.IEnderecoService;
 import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AlunoService implements IAlunoService{
 
     private final IAlunoRepository alunoRepository;
+    private final EnderecoRepository enderecoRepository;
 
     // Regra: Salvar
     @Override
@@ -30,6 +35,24 @@ public class AlunoService implements IAlunoService{
         // Regra de Negócio: Data de Matrícula Automática
         if (aluno.getDataMatricula() == null) {
             aluno.setDataMatricula(LocalDate.now());
+        }
+
+        if (aluno.getEndereco() != null) {
+            Endereco novoEnd = aluno.getEndereco();
+
+            // Busca se já existe um endereço idêntico no banco
+            Optional<Endereco> enderecoExistente = enderecoRepository.findByCepAndNumeroAndComplemento(
+                    novoEnd.getCep(),
+                    novoEnd.getNumero(),
+                    novoEnd.getComplemento()
+            );
+
+            if (enderecoExistente.isPresent()) {
+                // vincula o aluno ao endereço já salvo (ID existente)
+                aluno.setEndereco(enderecoExistente.get());
+            } else {
+                // Se não existe, o CascadeType.ALL do Aluno irá salvar o novo endereço automaticamente
+            }
         }
 
         return alunoRepository.save(aluno);

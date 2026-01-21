@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
@@ -18,4 +19,7 @@ public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
 
     // Busca alunos enderecos pelo bairro ou logradouro
     Page<Endereco> findByLogradouroContainingIgnoreCaseOrBairroContainingIgnoreCase(String logradouro, String bairro, Pageable pageable);
+
+    // Busca endereço exato para evitar duplicidade
+    Optional<Endereco> findByCepAndNumeroAndComplemento(String cep, String numero, String complemento);
 }

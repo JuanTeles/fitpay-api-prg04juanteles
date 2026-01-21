@@ -33,7 +33,7 @@ public class Aluno extends PersistenceEntity {
     @OneToMany(mappedBy = "aluno", fetch = FetchType.LAZY)
     private java.util.List<Matricula> matriculas;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;
 }
