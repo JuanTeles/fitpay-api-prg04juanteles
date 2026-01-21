@@ -7,13 +7,17 @@ import br.com.ifba.fitpay.api.features.plano.domain.model.Plano;
 import br.com.ifba.fitpay.api.features.plano.domain.repository.PlanoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatriculaService implements IMatriculaService {
@@ -95,5 +99,37 @@ public class MatriculaService implements IMatriculaService {
     @Override
     public List<Matricula> findByAluno(Long alunoId) {
         return matriculaRepository.findByAlunoIdOrderByDataInicioDesc(alunoId);
+    }
+
+    /**
+     * Verifica diariamente se há matrículas vencidas e as inativa.
+     * Cron "0 0 0 * * *" significa: Segundo 0, Minuto 0, Hora 0 (Meia-noite), Todos os dias.
+     */
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void verificarVencimentoDeMatriculas() {
+        log.info("Iniciando verificação automática de matrículas vencidas...");
+
+        LocalDate hoje = LocalDate.now();
+
+        // Busca apenas as ATIVAS que venceram antes de HOJE
+        List<Matricula> vencidas = matriculaRepository.findByStatusAndDataFimBefore(
+                StatusMatricula.ATIVO,
+                hoje
+        );
+
+        if (vencidas.isEmpty()) {
+            log.info("Nenhuma matrícula vencida encontrada hoje.");
+            return;
+        }
+
+        for (Matricula matricula : vencidas) {
+            matricula.setStatus(StatusMatricula.EXPIRADO);
+            // matricula.setDataCancelamento(hoje); // Se tiver esse campo, é bom setar
+            log.info("Inativando matrícula ID: {} do Aluno: {}", matricula.getId(), matricula.getAluno().getNome());
+        }
+
+        matriculaRepository.saveAll(vencidas);
+        log.info("Processo finalizado. Total inativado: {}", vencidas.size());
     }
 }

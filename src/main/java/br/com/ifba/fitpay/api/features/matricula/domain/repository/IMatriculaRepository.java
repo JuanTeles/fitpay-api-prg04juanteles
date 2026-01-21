@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -19,4 +20,7 @@ public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
 
     // Busca todas as matrículas de um aluno, ordenadas da mais recente para a mais antiga
     List<Matricula> findByAlunoIdOrderByDataInicioDesc(Long alunoId);
+
+    // busca matriculas com status X que venceram antes da data Y
+    List<Matricula> findByStatusAndDataFimBefore(StatusMatricula status, LocalDate data);
 }
