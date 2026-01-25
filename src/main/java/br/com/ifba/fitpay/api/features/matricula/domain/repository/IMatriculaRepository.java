@@ -29,4 +29,6 @@ public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
 
     // [Conta matrículas ativas que vencem dentro de um intervalo de datas
     long countByDataFimBetweenAndStatus(LocalDate inicio, LocalDate fim, StatusMatricula status);
+
+    boolean existsByAlunoId(Long alunoId);
 }

@@ -6,6 +6,7 @@ import br.com.ifba.fitpay.api.features.endereco.domain.model.Endereco;
 import br.com.ifba.fitpay.api.features.endereco.domain.repository.EnderecoRepository;
 import br.com.ifba.fitpay.api.features.endereco.domain.service.IEnderecoService;
 import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.repository.IMatriculaRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ public class AlunoService implements IAlunoService{
 
     private final IAlunoRepository alunoRepository;
     private final EnderecoRepository enderecoRepository;
+    private final IMatriculaRepository matriculaRepository;
 
     // Regra: Salvar
     @Override
@@ -116,6 +118,13 @@ public class AlunoService implements IAlunoService{
     public void delete(Long id) {
         // Garante que existe antes de deletar
         this.findById(id);
+
+        // Verifica se há histórico
+        if (matriculaRepository.existsByAlunoId(id)) {
+            throw new BusinessException("Não é possível remover este aluno pois ele possui histórico de matrículas. Tente inativá-lo.");
+        }
+
+        alunoRepository.deleteById(id);
 
         alunoRepository.deleteById(id);
     }
