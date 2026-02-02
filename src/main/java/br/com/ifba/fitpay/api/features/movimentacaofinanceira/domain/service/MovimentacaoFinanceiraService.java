@@ -62,8 +62,12 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     @Override
     @Transactional
     public MovimentacaoFinanceira update(MovimentacaoFinanceira movimentacao) {
-        // Garante existência
-        this.findById(movimentacao.getId());
+
+        MovimentacaoFinanceira existente = this.findById(movimentacao.getId());
+
+        if (existente.getTipoMovimentacao() == TipoMovimentacao.ENTRADA) {
+            throw new BusinessException("Movimentações de ENTRADA não podem ser editadas.");
+        }
 
         validarMovimentacao(movimentacao);
 
@@ -73,7 +77,13 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     @Override
     @Transactional
     public void delete(Long id) {
-        this.findById(id);
+
+        MovimentacaoFinanceira existente = this.findById(id);
+
+        if (existente.getTipoMovimentacao() == TipoMovimentacao.ENTRADA) {
+            throw new BusinessException("Movimentações de ENTRADA não podem ser excluídas.");
+        }
+
         repository.deleteById(id);
     }
 
