@@ -111,7 +111,17 @@ public class MatriculaService implements IMatriculaService {
      * Impede que um contrato termine antes de começar.
      */
     private void validarDatas(Matricula contrato) {
+        LocalDate hoje = LocalDate.now();
+
+        if (contrato.getDataInicio() != null) {
+            // Não permite data de início no passado para novas matrículas
+            if (contrato.getId() == null && contrato.getDataInicio().isBefore(hoje)) {
+                throw new BusinessException("A data de início da matrícula não pode ser anterior a hoje.");
+            }
+        }
+
         if (contrato.getDataInicio() != null && contrato.getDataFim() != null) {
+            // Data fim deve ser posterior à data início
             if (contrato.getDataFim().isBefore(contrato.getDataInicio())) {
                 throw new BusinessException("A Data Final do contrato não pode ser anterior à Data Inicial.");
             }
