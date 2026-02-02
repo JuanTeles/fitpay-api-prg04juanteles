@@ -3,6 +3,9 @@ package br.com.ifba.fitpay.api.features.matricula.domain.service;
 import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
 import br.com.ifba.fitpay.api.features.matricula.domain.repository.IMatriculaRepository;
+import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
+import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
+import br.com.ifba.fitpay.api.features.pagamento.domain.service.IPagamentoService;
 import br.com.ifba.fitpay.api.features.plano.domain.model.Plano;
 import br.com.ifba.fitpay.api.features.plano.domain.repository.PlanoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
@@ -24,10 +27,11 @@ public class MatriculaService implements IMatriculaService {
 
     private final IMatriculaRepository matriculaRepository;
     private final PlanoRepository planoRepository;
+    private final IPagamentoService pagamentoService;
 
     @Override
     @Transactional
-    public Matricula save(Matricula matricula) {
+    public Matricula save(Matricula matricula, MetodoPagamento metodoPagamento) {
         // Regra de Negócio: Validação de Datas
         validarDatas(matricula);
 
@@ -47,7 +51,25 @@ public class MatriculaService implements IMatriculaService {
         // Vincula o objeto plano completo para garantir consistência no save
         matricula.setPlano(planoReal);
 
-        return matriculaRepository.save(matricula);
+        // Salva a matrícula primeiro para gerar o ID necessário para o pagamento
+        Matricula matriculaSalva = matriculaRepository.save(matricula);
+
+        // se um metodo de pagamento foi selecionado, cria o registro financeiro automaticamente
+        if (metodoPagamento != null) {
+            Pagamento pagamento = new Pagamento();
+            pagamento.setMatricula(matriculaSalva);
+            pagamento.setMetodoPagamento(metodoPagamento);
+            pagamento.setValorPago(matriculaSalva.getValorFechado());
+            pagamento.setDataPagamento(LocalDate.now());
+
+            // Define uma referência amigável (Ex: "Adesão - 02/2026")
+            String ref = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
+            pagamento.setReferenciaPeriodo("Adesão - " + ref);
+
+            pagamentoService.save(pagamento);
+        }
+
+        return matriculaSalva;
     }
 
     @Override

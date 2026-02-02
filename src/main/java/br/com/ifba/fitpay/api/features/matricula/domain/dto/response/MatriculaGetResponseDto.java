@@ -2,6 +2,7 @@ package br.com.ifba.fitpay.api.features.matricula.domain.dto.response;
 
 import br.com.ifba.fitpay.api.features.aluno.domain.dto.response.AlunoGetResponseDto;
 import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import br.com.ifba.fitpay.api.features.plano.domain.dto.response.PlanoGetResponseDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

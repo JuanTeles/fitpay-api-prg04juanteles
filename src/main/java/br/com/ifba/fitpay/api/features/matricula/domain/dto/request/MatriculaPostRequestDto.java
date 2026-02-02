@@ -1,6 +1,7 @@
 package br.com.ifba.fitpay.api.features.matricula.domain.dto.request;
 
 import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
+import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,9 @@ public class MatriculaPostRequestDto {
     @NotNull(message = "Os dados do plano são obrigatórios")
     @Valid // Garante que o Java entre na classe PlanoIdDto para validar o ID lá dentro
     private PlanoIdDto plano;
+
+    @JsonProperty("metodo_pagamento")
+    private MetodoPagamento metodoPagamento;
 
     // Classes estáticas internas para facilitar o mapeamento de ID
     @Data

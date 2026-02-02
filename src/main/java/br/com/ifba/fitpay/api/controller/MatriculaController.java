@@ -31,11 +31,11 @@ public class MatriculaController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MatriculaGetResponseDto> save(@RequestBody @Valid MatriculaPostRequestDto contratoDto) {
 
-        // DTO -> Entity
+        // DTO -> Entity: Mapeia os dados da matrícula (data_inicio, aluno, plano, etc)
         Matricula contratoEntity = objectMapperUtil.map(contratoDto, Matricula.class);
 
-        // Service Salva
-        Matricula contratoSalvo = matriculaService.save(contratoEntity);
+        // Service Salva: Agora passamos a entidade E o metodo de pagamento vindo do DTO
+        Matricula contratoSalvo = matriculaService.save(contratoEntity, contratoDto.getMetodoPagamento());
 
         // Entity -> DTO Response
         MatriculaGetResponseDto response = objectMapperUtil.map(contratoSalvo, MatriculaGetResponseDto.class);
