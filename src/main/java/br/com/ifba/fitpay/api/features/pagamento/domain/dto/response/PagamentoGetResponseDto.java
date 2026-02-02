@@ -1,5 +1,6 @@
 package br.com.ifba.fitpay.api.features.pagamento.domain.dto.response;
 
+import br.com.ifba.fitpay.api.features.matricula.domain.dto.response.MatriculaGetResponseDto;
 import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -31,4 +32,6 @@ public class PagamentoGetResponseDto {
     @JsonProperty("contrato_aluno_id")
     private Long contratoAlunoId;
 
+    @JsonProperty("matricula")
+    private MatriculaGetResponseDto matricula;
 }
