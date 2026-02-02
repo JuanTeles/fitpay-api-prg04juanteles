@@ -3,6 +3,7 @@ package br.com.ifba.fitpay.api.controller;
 import br.com.ifba.fitpay.api.features.pagamento.domain.dto.request.PagamentoPutRequestDto;
 import br.com.ifba.fitpay.api.features.pagamento.domain.dto.response.PagamentoGetResponseDto;
 import br.com.ifba.fitpay.api.features.pagamento.domain.dto.request.PagamentoPostRequestDto;
+import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.service.IPagamentoService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
@@ -10,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,11 +44,17 @@ public class PagamentoController {
     }
 
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<PagamentoGetResponseDto>> findAll(Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.pagamentoService.findAll(pageable)
-                        .map(c -> objectMapperUtil.map(c, PagamentoGetResponseDto.class)));
+    public ResponseEntity<Page<PagamentoGetResponseDto>> findAll(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) MetodoPagamento metodo,
+            @PageableDefault(sort = "dataPagamento", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+
+        return ResponseEntity.ok(this.pagamentoService
+                .findAll(nome, metodo, pageable)
+                .map(p -> objectMapperUtil.map(p, PagamentoGetResponseDto.class)));
     }
+
 
     // Endpoint Update (Simplificado)
     @PutMapping(path = "/update",

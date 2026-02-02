@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 public interface IPagamentoService {
 
     Pagamento save(Pagamento pagamento);
-    Page<Pagamento> findAll(Pageable pageable);
+    Page<Pagamento> findAll(String nome, MetodoPagamento metodo, Pageable pageable);
     Pagamento findById(Long id);
     Pagamento update(Pagamento pagamento);
     void delete(Long id);

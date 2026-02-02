@@ -34,8 +34,13 @@ public class PagamentoService implements IPagamentoService {
     }
 
     @Override
-    public Page<Pagamento> findAll(Pageable pageable) {
-        return pagamentoRepository.findAll(pageable);
+    public Page<Pagamento> findAll(String nome, MetodoPagamento metodo, Pageable pageable) {
+        if (nome != null && !nome.trim().isEmpty()) {
+            nome = "%" + nome.trim() + "%";
+        } else {
+            nome = null;
+        }
+        return pagamentoRepository.findWithFilters(nome, metodo, pageable);
     }
 
     @Override
