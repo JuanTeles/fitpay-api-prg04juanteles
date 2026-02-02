@@ -4,5 +4,11 @@ public enum CategoriaMovimentacao {
     MENSALIDADE,      // Receita de alunos
     SALARIO,          // Despesa com funcionários
     COMPRA_MATERIAL,  // Despesa com equipamentos/limpeza
-    ALUGUEL           // Despesa fixa
+    ALUGUEL,          // Despesa fixa
+
+    CONTA_LUZ,
+    CONTA_AGUA,
+    INTERNET,
+    MANUTENCAO,
+    OUTROS
 }
