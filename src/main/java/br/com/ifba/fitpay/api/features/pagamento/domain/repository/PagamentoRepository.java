@@ -23,7 +23,7 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
             SELECT p FROM Pagamento p
             JOIN p.matricula m
             JOIN m.aluno a
-            WHERE (:nome IS NULL OR a.nome LIKE :nome)
+            WHERE (:nome IS NULL OR LOWER(a.nome) LIKE :nome)
             AND (:metodo IS NULL OR p.metodoPagamento = :metodo)
         """)
     Page<Pagamento> findWithFilters(
