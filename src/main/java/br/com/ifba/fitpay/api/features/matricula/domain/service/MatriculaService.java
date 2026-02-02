@@ -56,16 +56,7 @@ public class MatriculaService implements IMatriculaService {
 
         // se um metodo de pagamento foi selecionado, cria o registro financeiro automaticamente
         if (metodoPagamento != null) {
-            Pagamento pagamento = new Pagamento();
-            pagamento.setMatricula(matriculaSalva);
-            pagamento.setValorPago(matriculaSalva.getValorFechado());
-            pagamento.setDataPagamento(LocalDate.now());
-
-            // Define uma referência amigável (Ex: "Adesão - 02/2026")
-            String ref = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
-            pagamento.setReferenciaPeriodo("Adesão - " + ref);
-
-            pagamentoService.save(pagamento);
+            pagamentoService.gerarPagamentoAdesao(matriculaSalva, metodoPagamento);
         }
 
         return matriculaSalva;

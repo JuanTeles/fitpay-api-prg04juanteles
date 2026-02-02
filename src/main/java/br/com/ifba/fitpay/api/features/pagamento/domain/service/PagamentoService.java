@@ -1,5 +1,7 @@
 package br.com.ifba.fitpay.api.features.pagamento.domain.service;
 
+import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
+import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.repository.PagamentoRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
@@ -79,5 +81,30 @@ public class PagamentoService implements IPagamentoService {
         if (pagamento.getMatricula() == null || pagamento.getMatricula().getId() == null) {
             throw new BusinessException("O pagamento deve estar vinculado a um Contrato de Aluno válido.");
         }
+    }
+
+    @Override
+    @Transactional
+    public Pagamento gerarPagamentoAdesao(Matricula matricula, MetodoPagamento metodo) {
+        Pagamento pagamento = new Pagamento();
+
+        // Vincula o pagamento à matrícula recém-criada
+        pagamento.setMatricula(matricula);
+
+        // O valor é extraído do valorFechado da matrícula para garantir integridade
+        pagamento.setValorPago(matricula.getValorFechado());
+
+        // Define o metodo de pagamento obrigatório vindo da requisição
+        pagamento.setMetodoPagamento(metodo);
+
+        // Define a data atual para o registro
+        pagamento.setDataPagamento(LocalDate.now());
+
+        // Define uma referência amigável (Ex: "Adesão - 02/2026")
+        String ref = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
+        pagamento.setReferenciaPeriodo("Adesão - " + ref);
+
+        // Salva utilizando o metodo save da própria classe para disparar as validações
+        return this.save(pagamento);
     }
 }
