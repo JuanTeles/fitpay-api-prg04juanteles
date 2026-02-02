@@ -64,6 +64,13 @@ public class MovimentacaoFinanceiraController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping(path = "/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MovimentacaoGetResponseDto> findById(@PathVariable("id") Long id) {
+        MovimentacaoFinanceira mov = movimentacaoService.findById(id);
+        MovimentacaoGetResponseDto response = objectMapperUtil.map(mov, MovimentacaoGetResponseDto.class);
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         movimentacaoService.delete(id);
