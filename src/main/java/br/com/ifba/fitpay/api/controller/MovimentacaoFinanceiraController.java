@@ -3,6 +3,8 @@ package br.com.ifba.fitpay.api.controller;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.dto.request.MovimentacaoPutRequestDto;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.dto.response.MovimentacaoGetResponseDto;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.dto.request.MovimentacaoPostRequestDto;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.enums.CategoriaMovimentacao;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.enums.TipoMovimentacao;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.model.MovimentacaoFinanceira;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service.IMovimentacaoFinanceiraService;
 import br.com.ifba.fitpay.api.infraestructure.util.ObjectMapperUtil;
@@ -41,9 +43,13 @@ public class MovimentacaoFinanceiraController {
     }
 
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<MovimentacaoGetResponseDto>> findAll(Pageable pageable) {
+    public ResponseEntity<Page<MovimentacaoGetResponseDto>> findAll(
+            @RequestParam(value = "tipo", required = false) TipoMovimentacao tipo,
+            @RequestParam(value = "categoria", required = false) CategoriaMovimentacao categoria,
+            Pageable pageable) {
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.movimentacaoService.findAll(pageable)
+                .body(this.movimentacaoService.findAll(tipo, categoria, pageable)
                         .map(c -> objectMapperUtil.map(c, MovimentacaoGetResponseDto.class)));
     }
 

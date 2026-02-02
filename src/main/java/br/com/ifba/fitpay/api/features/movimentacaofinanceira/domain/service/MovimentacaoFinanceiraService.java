@@ -1,5 +1,7 @@
 package br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service;
 
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.enums.CategoriaMovimentacao;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.enums.TipoMovimentacao;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.model.MovimentacaoFinanceira;
 import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.repository.MovimentacaoFinanceiraRepository;
 import br.com.ifba.fitpay.api.infraestructure.exception.BusinessException;
@@ -32,8 +34,23 @@ public class MovimentacaoFinanceiraService implements IMovimentacaoFinanceiraSer
     }
 
     @Override
-    public Page<MovimentacaoFinanceira> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<MovimentacaoFinanceira> findAll(TipoMovimentacao tipo, CategoriaMovimentacao categoria, Pageable pageable) {
+        // Tem Tipo E Categoria
+        if (tipo != null && categoria != null) {
+            return repository.findByTipoMovimentacaoAndCategoriaMovimentacao(tipo, categoria, pageable);
+        }
+        // Apenas Tipo
+        else if (tipo != null) {
+            return repository.findByTipoMovimentacao(tipo, pageable);
+        }
+        // Apenas Categoria
+        else if (categoria != null) {
+            return repository.findByCategoriaMovimentacao(categoria, pageable);
+        }
+        // Nenhum filtro (busca tudo)
+        else {
+            return repository.findAll(pageable);
+        }
     }
 
     @Override
