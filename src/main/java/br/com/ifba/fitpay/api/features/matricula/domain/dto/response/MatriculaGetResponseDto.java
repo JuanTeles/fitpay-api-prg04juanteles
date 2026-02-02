@@ -25,6 +25,9 @@ public class MatriculaGetResponseDto {
 
     private StatusMatricula status;
 
+    @JsonProperty("valor_fechado")
+    private Double valorFechado;
+
     // Aqui retornamos o DTO completo do Aluno que você já criou
     @JsonProperty("aluno")
     private AlunoGetResponseDto aluno;
