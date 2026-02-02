@@ -40,6 +40,7 @@ public class MatriculaPostRequestDto {
     private PlanoIdDto plano;
 
     @JsonProperty("metodo_pagamento")
+    @NotNull(message = "O método de pagamento é obrigatório para realizar a matrícula")
     private MetodoPagamento metodoPagamento;
 
     // Classes estáticas internas para facilitar o mapeamento de ID

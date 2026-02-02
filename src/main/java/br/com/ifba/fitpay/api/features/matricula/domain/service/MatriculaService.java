@@ -58,7 +58,6 @@ public class MatriculaService implements IMatriculaService {
         if (metodoPagamento != null) {
             Pagamento pagamento = new Pagamento();
             pagamento.setMatricula(matriculaSalva);
-            pagamento.setMetodoPagamento(metodoPagamento);
             pagamento.setValorPago(matriculaSalva.getValorFechado());
             pagamento.setDataPagamento(LocalDate.now());
 
