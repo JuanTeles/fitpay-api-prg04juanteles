@@ -1,6 +1,11 @@
 package br.com.ifba.fitpay.api.features.pagamento.domain.service;
 
 import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
+import br.com.ifba.fitpay.api.features.matricula.domain.repository.IMatriculaRepository;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.enums.CategoriaMovimentacao;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.enums.TipoMovimentacao;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.model.MovimentacaoFinanceira;
+import br.com.ifba.fitpay.api.features.movimentacaofinanceira.domain.service.IMovimentacaoFinanceiraService;
 import br.com.ifba.fitpay.api.features.pagamento.domain.enums.MetodoPagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.model.Pagamento;
 import br.com.ifba.fitpay.api.features.pagamento.domain.repository.PagamentoRepository;
@@ -12,12 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class PagamentoService implements IPagamentoService {
 
     private final PagamentoRepository pagamentoRepository;
+    private final IMovimentacaoFinanceiraService movimentacaoService;
+    private final IMatriculaRepository matriculaRepository;
 
     @Override
     @Transactional
@@ -25,12 +33,24 @@ public class PagamentoService implements IPagamentoService {
         // Regras de validação antes de salvar
         validarPagamento(pagamento);
 
+        // Busca a Matrícula completa para ter acesso aos dados do Aluno
+        Matricula matriculaCompleta = matriculaRepository.findByIdWithAluno(pagamento.getMatricula().getId())
+                .orElseThrow(() -> new BusinessException("Matrícula não encontrada."));
+
+        // Vincula a matrícula completa ao objeto pagamento
+        pagamento.setMatricula(matriculaCompleta);
+
         // Regra: Se a data não for informada, assume a data de hoje
         if (pagamento.getDataPagamento() == null) {
             pagamento.setDataPagamento(LocalDate.now());
         }
 
-        return pagamentoRepository.save(pagamento);
+        Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
+
+        // Gera automaticamente a movimentação financeira de ENTRADA
+        this.gerarMovimentacao(pagamentoSalvo);
+
+        return pagamentoSalvo;
     }
 
     @Override
@@ -111,5 +131,20 @@ public class PagamentoService implements IPagamentoService {
 
         // Salva utilizando o metodo save da própria classe para disparar as validações
         return this.save(pagamento);
+    }
+
+    private void gerarMovimentacao(Pagamento pagamento) {
+        MovimentacaoFinanceira movimentacao = new MovimentacaoFinanceira();
+
+        movimentacao.setDataHora(LocalDateTime.now());
+        movimentacao.setValor(pagamento.getValorPago());
+        movimentacao.setTipoMovimentacao(TipoMovimentacao.ENTRADA);
+        movimentacao.setCategoriaMovimentacao(CategoriaMovimentacao.MENSALIDADE);
+        movimentacao.setPagamentoOrigem(pagamento);
+
+        // Monta uma descrição detalhada para o fluxo de caixa
+        movimentacao.setDescricao("Recebimento: " + pagamento.getReferenciaPeriodo() + " - Aluno: " + pagamento.getMatricula().getAluno().getNome());
+
+        movimentacaoService.save(movimentacao);
     }
 }

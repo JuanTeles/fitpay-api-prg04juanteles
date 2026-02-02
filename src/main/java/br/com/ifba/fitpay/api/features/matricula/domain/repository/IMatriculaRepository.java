@@ -4,10 +4,12 @@ import br.com.ifba.fitpay.api.features.matricula.domain.enums.StatusMatricula;
 import br.com.ifba.fitpay.api.features.matricula.domain.model.Matricula;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
@@ -31,4 +33,7 @@ public interface IMatriculaRepository extends JpaRepository<Matricula, Long> {
     long countByDataFimBetweenAndStatus(LocalDate inicio, LocalDate fim, StatusMatricula status);
 
     boolean existsByAlunoId(Long alunoId);
+
+    @Query("SELECT m FROM Matricula m JOIN FETCH m.aluno WHERE m.id = :id")
+    Optional<Matricula> findByIdWithAluno(@Param("id") Long id);
 }
