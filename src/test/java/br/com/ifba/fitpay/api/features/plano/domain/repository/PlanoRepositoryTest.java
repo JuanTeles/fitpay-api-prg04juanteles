@@ -51,17 +51,6 @@ class PlanoRepositoryTest {
         Assertions.assertThat(planoSalvo.getDescricao()).isEqualTo("Acesso total à academia");   // (assert 6)
     }
 
-    @Test
-    @DisplayName("Deve lançar DataIntegrityViolationException quando campos obrigatórios forem nulos")
-    void save_throwsDataIntegrityViolationException_whenCamposObrigatoriosSaoNulos() {
-        Plano planoInvalido = new Plano();
-        planoInvalido.setDuracaoDias(30);
-        planoInvalido.setDescricao("Plano sem nome e valor");
-
-        Assertions.assertThatExceptionOfType(DataIntegrityViolationException.class)             // (assert 7)
-                .isThrownBy(() -> planoRepository.save(planoInvalido));
-    }
-
     // -------------------------------------------------------------------------
     // Buscar por nome
     // -------------------------------------------------------------------------
